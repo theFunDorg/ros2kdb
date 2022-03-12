@@ -5,19 +5,19 @@
 #define KXVER 3
 #include "k.h"
 
-#include "msg/exhaust_input.hpp"
+#include "msg/ExhaustInput.hpp"
 
-#include "msg/exhaust_input.hpp"
+#include "msg/ExhaustInput.hpp"
 
-#include "msg/edf_input.hpp"
+#include "msg/EdfInput.hpp"
 
-#include "msg/elevon_input.hpp"
+#include "msg/ElevonInput.hpp"
 
-#include "msg/edf_input.hpp"
+#include "msg/EdfInput.hpp"
 
-#include "msg/elevon_input.hpp"
+#include "msg/ElevonInput.hpp"
 
-#include "msg/elevon_input.hpp"
+#include "msg/ElevonInput.hpp"
 
 using std::placeholders::_1;
 int hndl;
@@ -29,32 +29,32 @@ class MinimalSubscriber : public rclcpp::Node
     {
     // Creating the Subscriptions
 
-      subscription_r_act_ex=this->create_subscription<exhaust_input>(
+      subscription_r_act_ex=this->create_subscription<ExhaustInput>(
       "r_pod/actuate/exhaust", 10, std::bind(&MinimalSubscriber::callback_r_act_ex, this, _1));
 
-      subscription_l_act_ex=this->create_subscription<exhaust_input>(
+      subscription_l_act_ex=this->create_subscription<ExhaustInput>(
       "l_pod/actuate/exhaust", 10, std::bind(&MinimalSubscriber::callback_l_act_ex, this, _1));
 
-      subscription_r_act_edf=this->create_subscription<edf_input>(
+      subscription_r_act_edf=this->create_subscription<EdfInput>(
       "r_pod/actuate/edf", 10, std::bind(&MinimalSubscriber::callback_r_act_edf, this, _1));
 
-      subscription_r_act_elev=this->create_subscription<elevon_input>(
+      subscription_r_act_elev=this->create_subscription<ElevonInput>(
       "r_pod/actuate/elevon", 10, std::bind(&MinimalSubscriber::callback_r_act_elev, this, _1));
 
-      subscription_l_act_edf=this->create_subscription<edf_input>(
+      subscription_l_act_edf=this->create_subscription<EdfInput>(
       "l_pod/actuate/edf", 10, std::bind(&MinimalSubscriber::callback_l_act_edf, this, _1));
 
-      subscription_c_act_elev=this->create_subscription<elevon_input>(
+      subscription_c_act_elev=this->create_subscription<ElevonInput>(
       "c_pod/actuate/elevon", 10, std::bind(&MinimalSubscriber::callback_c_act_elev, this, _1));
 
-      subscription_l_act_elev=this->create_subscription<elevon_input>(
+      subscription_l_act_elev=this->create_subscription<ElevonInput>(
       "l_pod/actuate/elevon", 10, std::bind(&MinimalSubscriber::callback_l_act_elev, this, _1));
 
     }
     }
 
   private:
-    void callback_r_act_ex(const exhaust_input::SharedPtr msg) const
+    void callback_r_act_ex(const ExhaustInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -63,7 +63,7 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void callback_l_act_ex(const exhaust_input::SharedPtr msg) const
+    void callback_l_act_ex(const ExhaustInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -72,7 +72,7 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void callback_r_act_edf(const edf_input::SharedPtr msg) const
+    void callback_r_act_edf(const EdfInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -81,7 +81,7 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void callback_r_act_elev(const elevon_input::SharedPtr msg) const
+    void callback_r_act_elev(const ElevonInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -90,7 +90,7 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void callback_l_act_edf(const edf_input::SharedPtr msg) const
+    void callback_l_act_edf(const EdfInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -99,7 +99,7 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void callback_c_act_elev(const elevon_input::SharedPtr msg) const
+    void callback_c_act_elev(const ElevonInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -108,7 +108,7 @@ class MinimalSubscriber : public rclcpp::Node
     }
 
   private:
-    void callback_l_act_elev(const elevon_input::SharedPtr msg) const
+    void callback_l_act_elev(const ElevonInput::SharedPtr msg) const
     {
       auto mStg=const_cast<char*>(msg->data.c_str());
       RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
@@ -118,19 +118,19 @@ class MinimalSubscriber : public rclcpp::Node
 
     // Attaching the subscriptions
 
-      rclcpp::subscription_r_act_ex<exhaust_input>::SharedPtr value;
+      rclcpp::subscription_r_act_ex<ExhaustInput>::SharedPtr value;
 
-      rclcpp::subscription_l_act_ex<exhaust_input>::SharedPtr value;
+      rclcpp::subscription_l_act_ex<ExhaustInput>::SharedPtr value;
 
-      rclcpp::subscription_r_act_edf<edf_input>::SharedPtr value;
+      rclcpp::subscription_r_act_edf<EdfInput>::SharedPtr value;
 
-      rclcpp::subscription_r_act_elev<elevon_input>::SharedPtr value;
+      rclcpp::subscription_r_act_elev<ElevonInput>::SharedPtr value;
 
-      rclcpp::subscription_l_act_edf<edf_input>::SharedPtr value;
+      rclcpp::subscription_l_act_edf<EdfInput>::SharedPtr value;
 
-      rclcpp::subscription_c_act_elev<elevon_input>::SharedPtr value;
+      rclcpp::subscription_c_act_elev<ElevonInput>::SharedPtr value;
 
-      rclcpp::subscription_l_act_elev<elevon_input>::SharedPtr value;
+      rclcpp::subscription_l_act_elev<ElevonInput>::SharedPtr value;
 
     }
 };

@@ -11,13 +11,13 @@ subNameToTopic["c_act_elev"]="c_pod\/actuate\/elevon"
 subNameToTopic["l_act_elev"]="l_pod\/actuate\/elevon"
 subNameToTopic["r_act_elev"]="r_pod\/actuate\/elevon"
 
-subNameToMsg["l_act_ex"]="exhaust_input";
-subNameToMsg["r_act_ex"]="exhaust_input";
-subNameToMsg["l_act_edf"]="edf_input";
-subNameToMsg["r_act_edf"]="edf_input";
-subNameToMsg["c_act_elev"]="elevon_input";
-subNameToMsg["l_act_elev"]="elevon_input";
-subNameToMsg["r_act_elev"]="elevon_input";
+subNameToMsg["l_act_ex"]="ExhaustInput";
+subNameToMsg["r_act_ex"]="ExhaustInput";
+subNameToMsg["l_act_edf"]="EdfInput";
+subNameToMsg["r_act_edf"]="EdfInput";
+subNameToMsg["c_act_elev"]="ElevonInput";
+subNameToMsg["l_act_elev"]="ElevonInput";
+subNameToMsg["r_act_elev"]="ElevonInput";
 
 ##["l_pod/sensor/locate"]="locate";
 ##["r_pod/sensor/locate"]="locate";
@@ -46,7 +46,7 @@ declare -A subNameToCFunc;  ## Dictionary of functions that convert KDB to C dat
 IFS=$'\n'       # make newlines the only separator
 #set -f          # disable globbing
 
-for i in `ls /home/sean/cloud/ros_ws/src/febkdb/msg/*.msg`; do
+for i in `ls /home/sean/cloud/ros_ws/src/ros2kdb/msg/*.msg`; do
   keyName=`basename ${i::-4}`
   subNameToKDBFunc[$keyName]="$((1+`cat $i|wc -l`))";
   subNameToCFunc[$keyName]="";

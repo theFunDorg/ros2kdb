@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(febkdb)
+project(ros2kdb)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -14,35 +14,46 @@ include_directories("./include")
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Antenna.msg"  
+  "msg/EdfInput.msg"  
+  "msg/EdfOutput.msg"  
+  "msg/ElevonInput.msg"  
+  "msg/ElevonOutput.msg"  
+  "msg/ExhaustInput.msg"
+  "msg/ExhaustOutput.msg"  
+  "msg/Locate.msg"
+)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
 add_executable(kdbsub 
-	src/kdbsub.cpp
+	src/newSubKdb.cpp
 	include/c.o
 	)
 ament_target_dependencies(kdbsub rclcpp std_msgs)
 
-add_executable(kdbpub 
-	src/kdbpub.cpp
-	include/c.o
-	)
-ament_target_dependencies(kdbpub rclcpp std_msgs)
+#add_executable(kdbpub 
+#	src/kdbpub.cpp
+#	include/c.o
+#	)
+#ament_target_dependencies(kdbpub rclcpp std_msgs)
 
 target_include_directories(kdbsub
 	PRIVATE
         "./include"
 	)
 
-target_include_directories(kdbpub
-        PRIVATE
-        "./include"
-	)
+#target_include_directories(kdbpub
+#        PRIVATE
+#        "./include"
+#	)
 
 install(TARGETS
-  kdbpub
+#  kdbpub
   kdbsub
   DESTINATION lib/${PROJECT_NAME})
 
