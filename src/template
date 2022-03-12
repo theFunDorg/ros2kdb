@@ -1,0 +1,60 @@
+#include <memory>
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+
+#define KXVER 3
+#include "k.h"
+#####FORLOOP
+#include "msg/MSG_FILE.hpp"
+######LOOPEND
+
+using std::placeholders::_1;
+
+int hndl;
+class MinimalSubscriber : public rclcpp::Node
+{
+  public:
+    MinimalSubscriber()
+    : Node("minimal_subscriber")
+    {
+    // Creating the Subscriptions
+#####FORLOOP
+      subscription_SUBSCRIPTION_NAME=this->create_subscription<MSG_FILE>(
+      "TOPIC_NAME", 10, std::bind(&MinimalSubscriber::callback_SUBSCRIPTION_NAME, this, _1));
+######LOOPEND
+    }
+    }
+
+#####FORLOOP
+  private:
+    void callback_SUBSCRIPTION_NAME(const MSG_FILE::SharedPtr msg) const
+    {
+      auto mStg=const_cast<char*>(msg->data.c_str());
+      RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+      K msgRec=knk(KDB_PARAM_LIST);
+      k(hndl,"{[x] .ros.receive[TOPIC_NAME;x]}",msgRec,(K)0);
+    }
+#####LOOPEND
+
+
+    // Attaching the subscriptions
+#####FORLOOP
+      rclcpp::subscription_SUBSCRIPTION_NAME<MSG_FILE>::SharedPtr value;
+#####LOOPEND
+    }
+
+
+};
+
+int main(int argc, char * argv[])
+{
+
+  hndl = khpu("localhost", 1234,"myusername:mypassword");
+  K r = k(hndl,".ros.subInit[]",(K)0);
+
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<MinimalSubscriber>());
+  rclcpp::shutdown();
+  return 0;
+}
