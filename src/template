@@ -6,7 +6,7 @@
 #define KXVER 3
 #include "k.h"
 #####FORLOOP
-#include "msg/MSG_FILE.hpp"
+#include "ros2kdb/msg/MSG_FILE.hpp"
 ######LOOPEND
 
 using std::placeholders::_1;

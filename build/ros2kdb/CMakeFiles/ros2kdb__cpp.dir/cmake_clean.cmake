@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/ros2kdb__cpp"
+  "rosidl_generator_cpp/ros2kdb/msg/antenna.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/antenna__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/antenna__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/antenna__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/edf_input__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/edf_input__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/edf_input__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/edf_output__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/edf_output__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/edf_output__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/elevon_input__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/elevon_input__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/elevon_input__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/elevon_output__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/elevon_output__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/elevon_output__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/exhaust_input__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/exhaust_input__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/exhaust_input__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/exhaust_output__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/exhaust_output__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/exhaust_output__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/locate__builder.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/locate__struct.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/detail/locate__traits.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/edf_input.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/edf_output.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/elevon_input.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/elevon_output.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/exhaust_input.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/exhaust_output.hpp"
+  "rosidl_generator_cpp/ros2kdb/msg/locate.hpp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang )
+  include(CMakeFiles/ros2kdb__cpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

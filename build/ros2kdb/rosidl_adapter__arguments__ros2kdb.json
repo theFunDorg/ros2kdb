@@ -1,0 +1,13 @@
+{
+  "package_name": "ros2kdb",
+  "non_idl_tuples": [
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/Antenna.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/EdfInput.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/EdfOutput.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/ElevonInput.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/ElevonOutput.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/ExhaustInput.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/ExhaustOutput.msg",
+    "/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb:msg/Locate.msg"
+  ]
+}

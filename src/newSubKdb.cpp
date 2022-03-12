@@ -5,19 +5,19 @@
 #define KXVER 3
 #include "k.h"
 
-#include "msg/ExhaustInput.hpp"
+#include "ros2kdb/msg/ExhaustInput.hpp"
 
-#include "msg/ExhaustInput.hpp"
+#include "ros2kdb/msg/ExhaustInput.hpp"
 
-#include "msg/EdfInput.hpp"
+#include "ros2kdb/msg/EdfInput.hpp"
 
-#include "msg/ElevonInput.hpp"
+#include "ros2kdb/msg/ElevonInput.hpp"
 
-#include "msg/EdfInput.hpp"
+#include "ros2kdb/msg/EdfInput.hpp"
 
-#include "msg/ElevonInput.hpp"
+#include "ros2kdb/msg/ElevonInput.hpp"
 
-#include "msg/ElevonInput.hpp"
+#include "ros2kdb/msg/ElevonInput.hpp"
 
 using std::placeholders::_1;
 int hndl;
