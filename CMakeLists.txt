@@ -15,17 +15,18 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(podracer_interfaces REQUIRED)
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/Antenna.msg"  
-  "msg/EdfInput.msg"  
-  "msg/EdfOutput.msg"  
-  "msg/ElevonInput.msg"  
-  "msg/ElevonOutput.msg"  
-  "msg/ExhaustInput.msg"
-  "msg/ExhaustOutput.msg"  
-  "msg/Locate.msg"
-)
+##rosidl_generate_interfaces(ros2kdb
+##  "msg/Antenna.msg"  
+##  "msg/EdfInput.msg"  
+##  "msg/EdfOutput.msg"  
+##  "msg/ElevonInput.msg"  
+##  "msg/ElevonOutput.msg"  
+##  "msg/ExhaustInput.msg"
+##  "msg/ExhaustOutput.msg"  
+##  "msg/Locate.msg"
+##)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -34,7 +35,7 @@ add_executable(kdbsub
 	src/newSubKdb.cpp
 	include/c.o
 	)
-ament_target_dependencies(kdbsub rclcpp std_msgs)
+ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
 
 #add_executable(kdbpub 
 #	src/kdbpub.cpp
