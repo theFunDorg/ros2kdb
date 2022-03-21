@@ -48,77 +48,44 @@ class MinimalSubscriber : public rclcpp::Node
   private:
     void callback_r_act_ex(const podracer_interfaces::msg::ExhaustInput::SharedPtr msg) const
     {
-      float tl_spd=msg->tl_spd;
-      float tr_spd=msg->tr_spd;
-      float bl_spd=msg->bl_spd;
-      float br_spd=msg->br_spd;
-      float tl_pos=msg->tl_pos;
-      float tr_pos=msg->tr_pos;
-      float bl_pos=msg->bl_pos;
-      float br_pos=msg->br_pos;
-      K msgRec=knk(8,kf(tl_spd),kf(tr_spd),kf(bl_spd),kf(br_spd),kf(tl_pos),kf(tr_pos),kf(bl_pos),kf(br_pos));
-      k(hndl,"{[x] .ros.receive[r_pod/actuate/exhaust;x]}",msgRec,(K)0);
+      K msgRec=knk(8,kf(float(msg->tl_spd)),kf(float(msg->tr_spd)),kf(float(msg->bl_spd)),kf(float(msg->br_spd)),kf(float(msg->tl_pos)),kf(float(msg->tr_pos)),kf(float(msg->bl_pos)),kf(float(msg->br_pos)));
+      k(hndl,"{[x] .ros.receive[\"r_pod/actuate/exhaust\";x]}",msgRec,(K)0);
     }
 
     void callback_l_act_ex(const podracer_interfaces::msg::ExhaustInput::SharedPtr msg) const
     {
-      float tl_spd=msg->tl_spd;
-      float tr_spd=msg->tr_spd;
-      float bl_spd=msg->bl_spd;
-      float br_spd=msg->br_spd;
-      float tl_pos=msg->tl_pos;
-      float tr_pos=msg->tr_pos;
-      float bl_pos=msg->bl_pos;
-      float br_pos=msg->br_pos;
-      K msgRec=knk(8,kf(tl_spd),kf(tr_spd),kf(bl_spd),kf(br_spd),kf(tl_pos),kf(tr_pos),kf(bl_pos),kf(br_pos));
-      k(hndl,"{[x] .ros.receive[l_pod/actuate/exhaust;x]}",msgRec,(K)0);
+      K msgRec=knk(8,kf(float(msg->tl_spd)),kf(float(msg->tr_spd)),kf(float(msg->bl_spd)),kf(float(msg->br_spd)),kf(float(msg->tl_pos)),kf(float(msg->tr_pos)),kf(float(msg->bl_pos)),kf(float(msg->br_pos)));
+      k(hndl,"{[x] .ros.receive[\"l_pod/actuate/exhaust\";x]}",msgRec,(K)0);
     }
 
     void callback_r_act_edf(const podracer_interfaces::msg::EdfInput::SharedPtr msg) const
     {
-      float speed=msg->speed;
-      K msgRec=knk(1,kf(speed));
-      k(hndl,"{[x] .ros.receive[r_pod/actuate/edf;x]}",msgRec,(K)0);
+      K msgRec=knk(1,kf(float(msg->speed)));
+      k(hndl,"{[x] .ros.receive[\"r_pod/actuate/edf\";x]}",msgRec,(K)0);
     }
 
     void callback_r_act_elev(const podracer_interfaces::msg::ElevonInput::SharedPtr msg) const
     {
-      float l_spd=msg->l_spd;
-      float r_spd=msg->r_spd;
-      float l_pos=msg->l_pos;
-      float r_pos=msg->r_pos;
-
-      K msgRec=knk(4,kf(l_spd),kf(r_spd),kf(l_pos),kf(r_pos));
-      k(hndl,"{[x] .ros.receive[r_pod/actuate/elevon;x]}",msgRec,(K)0);
+      K msgRec=knk(4,kf(float(msg->l_spd)),kf(float(msg->r_spd)),kf(float(msg->l_pos)),kf(float(msg->r_pos)));
+      k(hndl,"{[x] .ros.receive[\"r_pod/actuate/elevon\";x]}",msgRec,(K)0);
     }
 
     void callback_l_act_edf(const podracer_interfaces::msg::EdfInput::SharedPtr msg) const
     {
-      //float speed=msg->speed;
       K msgRec=knk(1,kf(float(msg->speed)));
-      k(hndl,"{[x] .ros.receive[l_pod/actuate/edf;x]}",msgRec,(K)0);
+      k(hndl,"{[x] .ros.receive[\"l_pod/actuate/edf\";x]}",msgRec,(K)0);
     }
 
     void callback_c_act_elev(const podracer_interfaces::msg::ElevonInput::SharedPtr msg) const
     {
-      float l_spd=msg->l_spd;
-      float r_spd=msg->r_spd;
-      float l_pos=msg->l_pos;
-      float r_pos=msg->r_pos;
-
-      K msgRec=knk(4,kf(l_spd),kf(r_spd),kf(l_pos),kf(r_pos));
-      k(hndl,"{[x] .ros.receive[c_pod/actuate/elevon;x]}",msgRec,(K)0);
+      K msgRec=knk(4,kf(float(msg->l_spd)),kf(float(msg->r_spd)),kf(float(msg->l_pos)),kf(float(msg->r_pos)));
+      k(hndl,"{[x] .ros.receive[\"c_pod/actuate/elevon\";x]}",msgRec,(K)0);
     }
 
     void callback_l_act_elev(const podracer_interfaces::msg::ElevonInput::SharedPtr msg) const
     {
-      float l_spd=msg->l_spd;
-      float r_spd=msg->r_spd;
-      float l_pos=msg->l_pos;
-      float r_pos=msg->r_pos;
-
-      K msgRec=knk(4,kf(l_spd),kf(r_spd),kf(l_pos),kf(r_pos));
-      k(hndl,"{[x] .ros.receive[l_pod/actuate/elevon;x]}",msgRec,(K)0);
+      K msgRec=knk(4,kf(float(msg->l_spd)),kf(float(msg->r_spd)),kf(float(msg->l_pos)),kf(float(msg->r_pos)));
+      k(hndl,"{[x] .ros.receive[\"l_pod/actuate/elevon\";x]}",msgRec,(K)0);
     }
 
     // Attaching the subscriptions
@@ -135,7 +102,7 @@ class MinimalSubscriber : public rclcpp::Node
 
 int main(int argc, char * argv[])
 {
-  hndl = khpu("localhost", 1234,"myusername:mypassword");
+  hndl = -khpu("localhost", 1234,"myusername:mypassword");
   K r = k(hndl,".ros.subInit[]",(K)0);
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalSubscriber>());

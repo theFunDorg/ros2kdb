@@ -3,13 +3,13 @@
 declare -A subNameToTopic;
 declare -A subNameToMsg;
 
-subNameToTopic["l_act_ex"]="l_pod\/actuate\/exhaust"
-subNameToTopic["r_act_ex"]="r_pod\/actuate\/exhaust"
-subNameToTopic["l_act_edf"]="l_pod\/actuate\/edf"
-subNameToTopic["r_act_edf"]="r_pod\/actuate\/edf"
-subNameToTopic["c_act_elev"]="c_pod\/actuate\/elevon"
-subNameToTopic["l_act_elev"]="l_pod\/actuate\/elevon"
-subNameToTopic["r_act_elev"]="r_pod\/actuate\/elevon"
+subNameToTopic["l_act_ex"]="\/l_pod\/actuate\/exhaust"
+subNameToTopic["r_act_ex"]="\/r_pod\/actuate\/exhaust"
+subNameToTopic["l_act_edf"]="\/l_pod\/actuate\/edf"
+subNameToTopic["r_act_edf"]="\/r_pod\/actuate\/edf"
+subNameToTopic["c_act_elev"]="\/c_pod\/actuate\/elevon"
+subNameToTopic["l_act_elev"]="\/l_pod\/actuate\/elevon"
+subNameToTopic["r_act_elev"]="\/r_pod\/actuate\/elevon"
 
 subNameToMsg["l_act_ex"]="ExhaustInput";
 subNameToMsg["r_act_ex"]="ExhaustInput";
@@ -18,6 +18,14 @@ subNameToMsg["r_act_edf"]="EdfInput";
 subNameToMsg["c_act_elev"]="ElevonInput";
 subNameToMsg["l_act_elev"]="ElevonInput";
 subNameToMsg["r_act_elev"]="ElevonInput";
+
+subNameToHeaderName["l_act_ex"]="exhaust_input";
+subNameToHeaderName["r_act_ex"]="exhaust_input";
+subNameToHeaderName["l_act_edf"]="edf_input";
+subNameToHeaderName["r_act_edf"]="edf_input";
+subNameToHeaderName["c_act_elev"]="elevon_input";
+subNameToHeaderName["l_act_elev"]="elevon_input";
+subNameToHeaderName["r_act_elev"]="elevon_input";
 
 ##["l_pod/sensor/locate"]="locate";
 ##["r_pod/sensor/locate"]="locate";
@@ -57,8 +65,8 @@ for i in `ls /home/sean/cloud/ros_ws/src/ros2kdb/msg/*.msg`; do
     name=`echo $line |cut -f 2`;
     #echo $type;
     #echo $name;
-    subNameToKDBFunc[$keyName]=${subNameToKDBFunc[$keyName]}","${CtoKDBConvertor[$type]}"("$name")";
-    subNameToCFunc[$keyName]=${subNameToCFunc[$keyName]}","${KDBToCConvertor[$type]}"("$name")";
+    subNameToKDBFunc[$keyName]=${subNameToKDBFunc[$keyName]}","${CtoKDBConvertor[$type]}"("$type" (msg->"$name"))";
+    subNameToCFunc[$keyName]=${subNameToCFunc[$keyName]}","${KDBToCConvertor[$type]}"("$type" (msg->"$name"))";
     #echo ${subNameToKDBFunc[$keyName]}
     #echo ${KDBToMsgFunc[$i]}
   done
@@ -97,19 +105,21 @@ for i in "${SubCodeDict[@]}"; do
             MSG_FILE=${subNameToMsg[$keyVal]}
             TOPIC_NAME=${subNameToTopic[$keyVal]}
             KDB_PARAM_LIST=${subNameToKDBFunc[$MSG_FILE]}
+            HEADER_NAME=${subNameToHeaderName[$keyVal]}
 
             echo -e $i|sed -e "
             s/SUBSCRIPTION_NAME/$SUBSCRIPTION_NAME/g
             s/MSG_FILE/$MSG_FILE/g
             s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
             s/TOPIC_NAME/$TOPIC_NAME/g
+            s/HEADER_NAME/$HEADER_NAME/g
             "| grep -v "####*"
         done
     else
     echo -e $i| grep -v "####*"
     #echo hi
   fi
-done;
+done >fileTest.cpp
 
 # Somewhere here i have a loop, inside an if where the if checks there's FORLOOP
 #for i in "${!subNameToKDBFunc[@]}"
