@@ -5,7 +5,7 @@
 #define KXVER 3
 #include "k.h"
 #####FORLOOP
-#include "podracer_interfaces/msg/MSG_FILE.hpp"
+#include "podracer_interfaces/msg/HEADER_NAME.hpp"
 ######LOOPEND
 
 using std::placeholders::_1;
@@ -19,14 +19,14 @@ class MinimalSubscriber : public rclcpp::Node
     {
     // Creating the Subscriptions
 #####FORLOOP
-      subscription_SUBSCRIPTION_NAME=this->create_subscription<MSG_FILE>(
+      subscription_SUBSCRIPTION_NAME=this->create_subscription<podracer_interfaces::msg::MSG_FILE>(
       "TOPIC_NAME", 10, std::bind(&MinimalSubscriber::callback_SUBSCRIPTION_NAME, this, _1));
 ######LOOPEND
     }
 
   private:
 #####FORLOOP
-    void callback_SUBSCRIPTION_NAME(const MSG_FILE::SharedPtr msg) const
+    void callback_SUBSCRIPTION_NAME(const podracer_interfaces::msg::MSG_FILE::SharedPtr msg) const
     {
       K msgRec=knk(KDB_PARAM_LIST);
       k(hndl,"{[x] .ros.receive[\"TOPIC_NAME\";x]}",msgRec,(K)0);

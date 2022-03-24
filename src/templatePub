@@ -1,0 +1,52 @@
+#include <chrono>
+#include <memory>
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+
+#define KXVER 3
+#include "k.h"
+// Adding custom message header files
+#####FORLOOP
+#include "podracer_interfaces/msg/HEADER_NAME.hpp"
+######LOOPEND
+
+int hndl;
+using namespace std::chrono_literals;
+
+class MinimalPublisher : public rclcpp::Node
+{
+public:
+  MinimalPublisher()
+  : Node("minimal_publisher"), count_(0)
+  {
+#####FORLOOP
+    publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
+######LOOPEND    
+    timer_ = this->create_wall_timer(
+      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+  }
+
+private:
+  void timer_callback()
+  {
+    publisher_->publish(message);
+  }
+  rclcpp::TimerBase::SharedPtr timer_;
+#####FORLOOP
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+#####LOOPEND
+
+  size_t count_;
+};
+
+int main(int argc, char * argv[])
+{
+  hndl = khpu("localhost", 1234,"myusername:mypassword");
+  K r = k(hndl,".ros.pubInit[]",(K)0);
+
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::shutdown();
+  return 0;
+}

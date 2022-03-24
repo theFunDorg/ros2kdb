@@ -32,29 +32,29 @@ find_package(podracer_interfaces REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(kdbsub 
-	src/newSubKdb.cpp
+	src/subTest.cpp
 	include/c.o
 	)
 ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
 
-#add_executable(kdbpub 
-#	src/kdbpub.cpp
-#	include/c.o
-#	)
-#ament_target_dependencies(kdbpub rclcpp std_msgs)
+add_executable(kdbpub 
+	src/pubTest.cpp
+	include/c.o
+	)
+ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
 
 target_include_directories(kdbsub
-	PRIVATE
+	      PRIVATE
         "./include"
 	)
 
-#target_include_directories(kdbpub
-#        PRIVATE
-#        "./include"
-#	)
+target_include_directories(kdbpub
+        PRIVATE
+        "./include"
+	)
 
 install(TARGETS
-#  kdbpub
+  kdbpub
   kdbsub
   DESTINATION lib/${PROJECT_NAME})
 
