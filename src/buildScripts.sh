@@ -2,7 +2,7 @@
 ## Define the dictionary mapping the ROS topics to be created to their ROS msg file names
 declare -A subNameToTopic;
 declare -A subNameToMsg;
-
+declare -A subNameToHeaderName;
 #subNameToTopic["l_act_ex"]="\/l_pod\/actuate\/exhaust"
 subNameToTopic["r_act_ex"]="\/r_pod\/actuate\/exhaust"
 subNameToTopic["l_act_edf"]="\/l_pod\/actuate\/edf"
@@ -43,8 +43,8 @@ declare -A KDBToCConvertor;
 
 CtoKDBConvertor["float64"]="kf";
 CtoKDBConvertor["string"]="kstr";
-KDBToCConvertor["float64"]="f (F)";
-KDBToCConvertor["string"]="s (S)";
+KDBToCConvertor["float64"]="kF";
+KDBToCConvertor["string"]="kS";
 
 
 ## Create dictionary of ROS msg file names to their KDB conversion function
@@ -64,10 +64,11 @@ for i in `ls /home/sean/cloud/ros_ws/src/ros2kdb/msg/*.msg`; do
   for line in $(cat < "$i"); do
     type=`echo $line |cut -f 1`;
     name=`echo $line |cut -f 2`;
+    unnumberedType=`echo  $varname | sed 's/[0-9]//g'`
     #echo $type;
     #echo $name;
-    subNameToKDBFunc[$keyName]=${subNameToKDBFunc[$keyName]}","${CtoKDBConvertor[$type]}"("$type" (msg->"$name"))";
-    subNameToCFunc[$keyName]=${subNameToCFunc[$keyName]}"\n    msg."$name"=(response["$index"])->"${KDBToCConvertor[$type]};
+    subNameToKDBFunc[$keyName]=${subNameToKDBFunc[$keyName]}","${CtoKDBConvertor[$type]}"("$unnumberedType" (msg->"$name"))";
+    subNameToCFunc[$keyName]=${subNameToCFunc[$keyName]}"\n    msg."$name"="${KDBToCConvertor[$type]}"(data)["$index"];";
     index=$(( index+1 ));
     #echo ${subNameToKDBFunc[$keyName]}
     #echo ${KDBToMsgFunc[$i]}
@@ -107,6 +108,7 @@ for i in $(cat < "src/templatePub.cpp"); do
 for i in "${PubCodeDict[@]}"; do 
   if [[ $i == *"#####FORLOOP"* ]];
     then 
+        index=0
         for keyVal in "${!subNameToTopic[@]}";
         do
             PUBLISHER_NAME=$keyVal
@@ -121,7 +123,10 @@ for i in "${PubCodeDict[@]}"; do
             s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
             s/TOPIC_NAME/$TOPIC_NAME/g
             s/HEADER_NAME/$HEADER_NAME/g
+            s/INDEX/$index/g
             "| grep -v "####*"
+
+            index=$(( index+1 ));
         done
     else
     echo -e $i| grep -v "####*"
