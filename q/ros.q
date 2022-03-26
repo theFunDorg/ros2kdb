@@ -29,5 +29,6 @@ system "p 1234";
   .ros.topicDict[`$topic] upsert data;
   };
 
+.ros.receive:{show sc-.z.P;show x;show y};
 
 a:0;
