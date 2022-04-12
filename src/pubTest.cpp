@@ -17,6 +17,7 @@ K response;
 K data;
 K topic;
 std::vector<std::string> funcVect;
+
 int checkString (std::string inp, std::vector<std::string> vct)
 {
   for(unsigned int i = 0; i < vct.size(); i++) {
@@ -35,7 +36,6 @@ public:
   {
 
     publisher_r_act_ex = this->create_publisher<podracer_interfaces::msg::ExhaustInput>("/r_pod/actuate/exhaust", 10);
-
     publisher_l_act_edf = this->create_publisher<podracer_interfaces::msg::EdfInput>("/l_pod/actuate/edf", 10);
 
     timer_ = this->create_wall_timer(0ms, std::bind(&MinimalPublisher::timer_callback, this));

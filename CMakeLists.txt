@@ -41,7 +41,13 @@ add_executable(kdbpub
 	src/pubTest.cpp
 	include/c.o
 	)
-ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
+  ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
+
+add_executable(kdbsvc 
+	src/serviceTest.cpp
+	include/c.o
+	)
+  ament_target_dependencies(kdbsvc rclcpp std_msgs podracer_interfaces)
 
 target_include_directories(kdbsub
 	      PRIVATE
@@ -53,9 +59,16 @@ target_include_directories(kdbpub
         "./include"
 	)
 
+target_include_directories(kdbsvc
+        PRIVATE
+        "./include"
+  )
+
+
 install(TARGETS
   kdbpub
   kdbsub
+  kdbsvc
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

@@ -22,6 +22,11 @@ system "p 1234";
   show `$"ROS2 Subscriber is initialised";
   };
 
+.ros.servInit:{[]
+  .ros.pubHndl:neg .z.w;
+  show `$"ROS2 Service is initialised";
+  };
+
 .ros.send:{[topic;data]
   .ros.pubHndl(topic;(),data);
   };
@@ -29,7 +34,9 @@ system "p 1234";
 .ros.receive:{[topic;data]
   .ros.topicTbl[`$topic][`tblName] upsert .z.P,data;
   };
-
+.ros.funcOne:{[x;y]
+  :x%y
+  }
 //.ros.receive:{show sc-.z.P;show x;show y};
 
 .ros.parseSchema:{[msgFile]
@@ -57,6 +64,3 @@ assign tableSchema to tableName
 "EdfOutput";
 "ElevonOutput";
 "ExhaustOutput";
-
-
-sean@CLAPTOP:~/cloud/ros_ws$ ll src/podracer_interfaces/msg/`hello

@@ -1,6 +1,13 @@
 # ROS2KDB
 Generic ROS2 pub/sub api for KDB
 
+# Instructions
+cd ~/cloud/ros_ws
+. install/setup.bash;echo done;ros2 run ros2kdb kdbpub
+. install/setup.bash;echo done;ros2 run ros2kdb kdbsub
+q q/ros.q
+
+
 # TODO
 * Parameterise the shell script for package, filepaths, etc
 * Correct the shell script to create the correct publisher file
