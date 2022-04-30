@@ -1,6 +1,6 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+//#include "std_msgs/msg/string.hpp"
 
 #define KXVER 3
 #include "k.h"
@@ -43,7 +43,7 @@ class MinimalSubscriber : public rclcpp::Node
 int main(int argc, char * argv[])
 {
 
-  hndl = - khpu("localhost", 1234,"myusername:mypassword");
+  hndl = - khpu("localhost", 2345,"myusername:mypassword");
   K r = k(hndl,".ros.subInit[]",(K)0);
 
   rclcpp::init(argc, argv);

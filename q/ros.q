@@ -1,4 +1,4 @@
-system "p 1234";
+// system "p 1234";
 
 // make below keyed table with additional msg file name column
 .ros.topicTbl:([topic:`$()]tblName:`$();msgFile:`$());
@@ -23,8 +23,13 @@ system "p 1234";
   };
 
 .ros.servInit:{[]
-  .ros.pubHndl:neg .z.w;
+  .ros.servHndl:neg .z.w;
   show `$"ROS2 Service is initialised";
+  };
+
+.ros.clientInit:{[]
+  .ros.clntHndl:neg .z.w;
+  show `$"ROS2 Client is initialised";
   };
 
 .ros.send:{[topic;data]
@@ -34,10 +39,21 @@ system "p 1234";
 .ros.receive:{[topic;data]
   .ros.topicTbl[`$topic][`tblName] upsert .z.P,data;
   };
+
 .ros.funcOne:{[x;y]
+  show x;
+  show y;
   :x%y
-  }
-//.ros.receive:{show sc-.z.P;show x;show y};
+  };
+
+.ros.clientRequest:{[service;request]
+  .ros.clntHndl(service;request)
+  };
+
+.ros.clientResponse:{[service;response]
+  show service;
+  show response;
+  };
 
 .ros.parseSchema:{[msgFile]
   dat:"\t" vs/: system "cat ../podracer_interfaces/msg/",(string msgFile),".msg";
@@ -49,18 +65,3 @@ system "p 1234";
 
 / Assign table schemas to topic tablenames
 {x[`tblName] set .ros.msgSchemas[x`msgFile]}each .ros.topicTbl;
-/
-get msg filenames
-
-parse into table schema, store in dictionary
-create conversion dictionary thugh, way easier, cleaner
-
-
-flip (`time,`$dat[;1])!(`timestamp,(`$dat[;0] except\: "64"))$\:()
-assign tableSchema to tableName
-
-"Locate";
-"Antenna";
-"EdfOutput";
-"ElevonOutput";
-"ExhaustOutput";

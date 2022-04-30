@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+//#include "std_msgs/msg/string.hpp"
 #define KXVER 3
 #include "k.h"
 // Adding custom message header files

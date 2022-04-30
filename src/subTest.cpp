@@ -49,7 +49,7 @@ class MinimalSubscriber : public rclcpp::Node
     };
 int main(int argc, char * argv[])
 {
-  hndl = - khpu("localhost", 1234,"myusername:mypassword");
+  hndl = - khpu("localhost", 2345,"myusername:mypassword");
   K r = k(hndl,".ros.subInit[]",(K)0);
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalSubscriber>());

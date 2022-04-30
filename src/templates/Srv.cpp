@@ -3,7 +3,10 @@
 #define KXVER 3
 #include "k.h"
 
+#####FORLOOP
 #include "podracer_interfaces/srv/serve.hpp"
+#####LOOPEND
+
 using std::placeholders::_1;
 using std::placeholders::_2;
 
@@ -15,29 +18,24 @@ class MinimalService : public rclcpp::Node
      MinimalService()
      :Node("minimal_service")
      {
+#####FORLOOP
          FuncOne = this->create_service<podracer_interfaces::srv::Serve>("kdbFunc", std::bind(&MinimalService::firstFunc, this, _1, _2));
-         FuncTwo = this->create_service<podracer_interfaces::srv::Serve>("cppFunc", std::bind(&MinimalService::secondFunc, this, _1, _2));
+#####LOOPEND
      }
  
  private:
-
+#####FORLOOP
     void firstFunc(const std::shared_ptr<podracer_interfaces::srv::Serve::Request> request,
               std::shared_ptr<podracer_interfaces::srv::Serve::Response>      response)
     {   
-//        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Incoming request\navalu: %ld" " bvalu: %ld", request->avalu, request->bvalu);
         K resp=k(hndl,".ros.funcOne",ki( (request->avalu)), ki( (request->bvalu)),(K)0);
-//        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Response from KDB is : %4.4f" " or %4.4f", (resp->f), kF(resp)[0] );
         response->cvalu=(resp->f);
-//        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sending response");
     }
+#####LOOPEND
 
-    void secondFunc(const std::shared_ptr<podracer_interfaces::srv::Serve::Request> request,
-              std::shared_ptr<podracer_interfaces::srv::Serve::Response>      response)
-    {
-      response->cvalu = request->avalu + request->bvalu;
-    }
+#####FORLOOP
     rclcpp::Service<podracer_interfaces::srv::Serve>::SharedPtr FuncOne;
-    rclcpp::Service<podracer_interfaces::srv::Serve>::SharedPtr FuncTwo;
+#####LOOPEND
   };
 
 

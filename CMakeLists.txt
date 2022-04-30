@@ -8,12 +8,27 @@ set(CMAKE_CXX_STANDARD 17)
 add_compile_options(-Wall -Wextra )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -march=native")
+# Define variables here for src directory
+# KDB directory
+# msg file directory/C++ topic thingy
+
+
+# Run the building script here
+## add_custom_target(
+##     buildCppScripts
+##     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/src/buildScripts.sh
+## )
+## add_dependencies(kdbsub buildCppScripts)
+## add_dependencies(kdbpub buildCppScripts)
+## add_dependencies(kdbsvc buildCppScripts)
+## add_dependencies(kdbclnt buildCppScripts)
+
 
 include_directories("./include")
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
+#find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(podracer_interfaces REQUIRED)
 
@@ -31,44 +46,55 @@ find_package(podracer_interfaces REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(kdbsub 
-	src/subTest.cpp
-	include/c.o
-	)
-ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
-
-add_executable(kdbpub 
-	src/pubTest.cpp
-	include/c.o
-	)
-  ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
+# add_executable(kdbsub 
+# 	src/subTest.cpp
+# 	include/c.o
+# 	)
+# ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
+# 
+# add_executable(kdbpub 
+# 	src/pubTest.cpp
+# 	include/c.o
+# 	)
+#   ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
 
 add_executable(kdbsvc 
 	src/serviceTest.cpp
 	include/c.o
 	)
-  ament_target_dependencies(kdbsvc rclcpp std_msgs podracer_interfaces)
+  ament_target_dependencies(kdbsvc rclcpp podracer_interfaces)
 
-target_include_directories(kdbsub
-	      PRIVATE
-        "./include"
+add_executable(kdbclnt 
+	src/clientTest.cpp
+	include/c.o
 	)
+  ament_target_dependencies(kdbclnt rclcpp podracer_interfaces)
 
-target_include_directories(kdbpub
-        PRIVATE
-        "./include"
-	)
+# target_include_directories(kdbsub
+# 	      PRIVATE
+#         "./include"
+# 	)
+# 
+# target_include_directories(kdbpub
+#         PRIVATE
+#         "./include"
+# 	)
 
 target_include_directories(kdbsvc
         PRIVATE
         "./include"
   )
-
+ 
+ target_include_directories(kdbclnt
+  PRIVATE
+  "./include"
+)
 
 install(TARGETS
-  kdbpub
-  kdbsub
+#  kdbpub
+#  kdbsub
   kdbsvc
+  kdbclnt
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
