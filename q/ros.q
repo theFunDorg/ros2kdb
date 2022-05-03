@@ -37,7 +37,7 @@
   };
 
 .ros.receive:{[topic;data]
-  .ros.topicTbl[`$topic][`tblName] upsert .z.P,data;
+  .ros.topicTbl[`$topic][`tblName] upsert .z.P,data
   };
 
 .ros.funcOne:{[x;y]
@@ -52,7 +52,7 @@
 
 .ros.clientResponse:{[service;response]
   show service;
-  show response;
+  show response
   };
 
 .ros.parseSchema:{[msgFile]

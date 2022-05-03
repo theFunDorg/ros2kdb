@@ -48,13 +48,8 @@ private:
       request->bvalu = kI(data)[1];
     auto result = client_serve_kdb->async_send_request(request);
     // Wait for the result.
-    // if (rclcpp::spin_until_future_complete(this, result) == rclcpp::FutureReturnCode::SUCCESS)
-    // {
-    //   RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sum: "); //%ld", result.get()->sum);
-    //   } else {
-    //   RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call service func_client_serve_kdb");
-    // }
-    K resp=kF(result.get()->cvalu);
+    rclcpp::spin_until_future_complete(this, result);
+    K resp=kf(result.get()->cvalu);
     k(hndl,".ros.clientResponse","funcServKDB",resp,(K)0);
   }
 
@@ -63,7 +58,6 @@ private:
     auto request = std::make_shared<podracer_interfaces::srv::Serve::Request>();
       request->avalu = kI(data)[0];
       request->bvalu = kI(data)[1];
-
     auto result = client_serve_kdb->async_send_request(request);
     // Wait for the result.
     // if (rclcpp::spin_until_future_complete(this, result) == rclcpp::FutureReturnCode::SUCCESS)
