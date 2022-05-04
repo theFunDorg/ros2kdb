@@ -29,6 +29,8 @@ int checkString (std::string inp, std::vector<std::string> vct)
 };
 
 using namespace std::chrono_literals;
+
+
 class MinimalClient : public rclcpp::Node
 {
 public:
@@ -46,11 +48,19 @@ private:
     auto request = std::make_shared<podracer_interfaces::srv::Serve::Request>();
       request->avalu = kI(data)[0];
       request->bvalu = kI(data)[1];
-    auto result = client_serve_kdb->async_send_request(request);
     // Wait for the result.
-    rclcpp::spin_until_future_complete(this, result);
-    K resp=kf(result.get()->cvalu);
-    k(hndl,".ros.clientResponse","funcServKDB",resp,(K)0);
+    using ServiceResponseFuture =
+      rclcpp::Client<podracer_interfaces::srv::Serve>::SharedFuture;
+    auto response_received_callback = [this](ServiceResponseFuture future) {
+        auto result = future.get();
+        RCLCPP_INFO(rclcpp::get_logger("client"), "Result is: %4.4f", (result->cvalu) );
+        RCLCPP_INFO(rclcpp::get_logger("client"), "Deriving KDB value");
+        K resp=kf((future.get())->cvalu);
+        RCLCPP_INFO(rclcpp::get_logger("client"), "Sending value to KDB");
+        k(hndl,"{.ros.clientResponse[`funcServKDB;x]}",resp,(K)0);
+        RCLCPP_INFO(rclcpp::get_logger("client"), "Second result is: %4.4f", (result->cvalu) );
+      };
+    client_serve_kdb->async_send_request(request,response_received_callback);
   }
 
   void func_client_serve_cpp(K data) 
@@ -96,9 +106,10 @@ private:
 };
 int main(int argc, char * argv[])
 {
-
   funcVect.push_back ("func_client_serve_kdb");
   funcVect.push_back ("func_client_serve_cpp");
+  hndl = - khpu("0.0.0.0", 4567,"myusername:mypassword");
+  K r = k(hndl,".ros.clientInit[]",(K)0);
 
  // // Checking if service is responsive
  // while (!client_serve_kdb->wait_for_service(1s)) {
@@ -118,8 +129,6 @@ int main(int argc, char * argv[])
  //   RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
  // }
 
-  hndl = - khpu("0.0.0.0", 4567,"myusername:mypassword");
-  K r = k(hndl,".ros.clientInit[]",(K)0);
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalClient>());
   rclcpp::shutdown();
@@ -133,11 +142,23 @@ int main(int argc, char * argv[])
 //===================================================================================================================================
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 //int main(int argc, char **argv)
 //{
 //  rclcpp::init(argc, argv);
 //
-//  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("add_two_ints_client");
+//  <rclcpp::Node> node = rclcpp::Node::make_shared("add_two_ints_client");
 //  rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client = node->create_client<example_interfaces::srv::AddTwoInts>("add_two_ints");
 //
 //

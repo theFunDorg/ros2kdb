@@ -8,7 +8,8 @@ KDB_SUB_PORT=1234;
 KDB_PUB_PORT=2345;
 KDB_SRV_PORT=3456;
 KDB_CLNT_PORT=4567;
-
+KDB_HOST="0.0.0.0";
+KDB_UNAME_PWD="myusername:mypassword"
 MSG_PKG="podracer_interfaces";
 SRV_PKG="podracer_interfaces";
 
