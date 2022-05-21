@@ -39,7 +39,7 @@ q q/ros.q -p 4567 #Service Client
 
 .ros.clientRequest[`func_client_serve_kdb;(1i;2i)]
 
-# TODO
+# TO DO
 * Parameterise the shell script for package, filepaths, etc
 * Correct the shell script to create the correct publisher file
 * Add .ros.send, .ros.receive and add their upsert tables too

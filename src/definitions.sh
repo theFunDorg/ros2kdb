@@ -61,6 +61,22 @@ subNameToHeaderName["l_act_edf"]="edf_input";
 # Service names 
 ## ================================================================================================== ##
 
+
+## ================================================================================================== ##
+## Define the dictionary of datatype to KDB conversion function
+## ================================================================================================== ##
+
+declare -A CtoKDBConvertor;
+declare -A KDBToCConvertor;
+
+CtoKDBConvertor["float64"]="kf";
+CtoKDBConvertor["int64"]="ki";
+CtoKDBConvertor["string"]="kstr";
+
+KDBToCConvertor["float64"]="kF";
+KDBToCConvertor["int64"]="kI";
+KDBToCConvertor["string"]="kS";
+
 ##["l_pod/sensor/locate"]="locate";
 ##["r_pod/sensor/locate"]="locate";
 ##["c_pod/sensor/antenna"]="antenna";

@@ -24,9 +24,7 @@ class MinimalService : public rclcpp::Node
     void firstFunc(const std::shared_ptr<podracer_interfaces::srv::Serve::Request> request,
               std::shared_ptr<podracer_interfaces::srv::Serve::Response>      response)
     {   
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Incoming request\navalu: %ld" " bvalu: %ld", request->avalu, request->bvalu);
         K resp=k(hndl,".ros.funcOne",ki( (request->avalu)), ki( (request->bvalu)),(K)0);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Response from KDB is : %4.4f", (resp->f) );
         response->cvalu=(resp->f);
     }
 
