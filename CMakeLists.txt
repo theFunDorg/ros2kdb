@@ -46,17 +46,17 @@ find_package(podracer_interfaces REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-# add_executable(kdbsub 
-# 	src/subTest.cpp
-# 	include/c.o
-# 	)
-# ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
-# 
-# add_executable(kdbpub 
-# 	src/pubTest.cpp
-# 	include/c.o
-# 	)
-#   ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
+ add_executable(kdbsub 
+ 	src/subTest.cpp
+ 	include/c.o
+ 	)
+ ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
+ 
+ add_executable(kdbpub 
+ 	src/pubTest.cpp
+ 	include/c.o
+ 	)
+   ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
 
 add_executable(kdbsvc 
 	src/serviceTest.cpp
@@ -70,15 +70,15 @@ add_executable(kdbclnt
 	)
   ament_target_dependencies(kdbclnt rclcpp podracer_interfaces)
 
-# target_include_directories(kdbsub
-# 	      PRIVATE
-#         "./include"
-# 	)
-# 
-# target_include_directories(kdbpub
-#         PRIVATE
-#         "./include"
-# 	)
+ target_include_directories(kdbsub
+ 	      PRIVATE
+         "./include"
+ 	)
+ 
+ target_include_directories(kdbpub
+         PRIVATE
+         "./include"
+ 	)
 
 target_include_directories(kdbsvc
         PRIVATE
@@ -91,8 +91,8 @@ target_include_directories(kdbsvc
 )
 
 install(TARGETS
-#  kdbpub
-#  kdbsub
+  kdbpub
+  kdbsub
   kdbsvc
   kdbclnt
   DESTINATION lib/${PROJECT_NAME})

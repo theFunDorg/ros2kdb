@@ -65,3 +65,5 @@
 
 / Assign table schemas to topic tablenames
 {x[`tblName] set .ros.msgSchemas[x`msgFile]}each .ros.topicTbl;
+
+// select count i by date from table where date within 2022.01.01 2010.01.01

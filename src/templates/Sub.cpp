@@ -5,7 +5,7 @@
 #define KXVER 3
 #include "k.h"
 #####FORLOOP
-#include "podracer_interfaces/msg/HEADER_NAME.hpp"
+#include "MSG_PKG/msg/HEADER_NAME.hpp"
 ######LOOPEND
 
 using std::placeholders::_1;
@@ -19,14 +19,14 @@ class MinimalSubscriber : public rclcpp::Node
     {
     // Creating the Subscriptions
 #####FORLOOP
-      subscription_SUBSCRIPTION_NAME=this->create_subscription<podracer_interfaces::msg::MSG_FILE>(
+      subscription_SUBSCRIPTION_NAME=this->create_subscription<MSG_PKG::msg::MSG_FILE>(
       "TOPIC_NAME", 10, std::bind(&MinimalSubscriber::callback_SUBSCRIPTION_NAME, this, _1));
 ######LOOPEND
     }
 
   private:
 #####FORLOOP
-    void callback_SUBSCRIPTION_NAME(const podracer_interfaces::msg::MSG_FILE::SharedPtr msg) const
+    void callback_SUBSCRIPTION_NAME(const MSG_PKG::msg::MSG_FILE::SharedPtr msg) const
     {
       K msgRec=knk(KDB_PARAM_LIST);
       k(hndl,"{[x] .ros.receive[\"TOPIC_NAME\";x]}",msgRec,(K)0);
@@ -36,14 +36,14 @@ class MinimalSubscriber : public rclcpp::Node
 
     // Attaching the subscriptions
 #####FORLOOP
-      rclcpp::Subscription<podracer_interfaces::msg::MSG_FILE>::SharedPtr subscription_SUBSCRIPTION_NAME;
+      rclcpp::Subscription<MSG_PKG::msg::MSG_FILE>::SharedPtr subscription_SUBSCRIPTION_NAME;
 #####LOOPEND
     };
 
 int main(int argc, char * argv[])
 {
 
-  hndl = - khpu("localhost", 2345,"myusername:mypassword");
+  hndl = - khpu("localhost", PORT,"myusername:mypassword");
   K r = k(hndl,".ros.subInit[]",(K)0);
 
   rclcpp::init(argc, argv);

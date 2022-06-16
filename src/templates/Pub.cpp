@@ -7,7 +7,7 @@
 #include "k.h"
 // Adding custom message header files
 #####FORLOOP
-#include "podracer_interfaces/msg/HEADER_NAME.hpp"
+#include "MSG_PKG/msg/HEADER_NAME.hpp"
 ######LOOPEND
 
 int hndl;
@@ -28,16 +28,16 @@ int checkString (std::string inp, std::vector<std::string> vct)
 
 using namespace std::chrono_literals;
 
-class MinimalPublisher : public rclcpp::Node
+class KDBPublisher : public rclcpp::Node
 {
 public:
-  MinimalPublisher()
+  KDBPublisher()
   : Node("minimal_publisher"), count_(0)
   {
 #####FORLOOP
-    publisher_PUBLISHER_NAME = this->create_publisher<podracer_interfaces::msg::MSG_FILE>("TOPIC_NAME", 10);
+    publisher_PUBLISHER_NAME = this->create_publisher<MSG_PKG::msg::MSG_FILE>("TOPIC_NAME", 10);
 ######LOOPEND    
-    timer_ = this->create_wall_timer(0ms, std::bind(&MinimalPublisher::timer_callback, this));
+    timer_ = this->create_wall_timer(0ms, std::bind(&KDBPublisher::timer_callback, this));
   }
 
 private:
@@ -69,7 +69,7 @@ private:
   rclcpp::TimerBase::SharedPtr timer_;
 
 #####FORLOOP
-  rclcpp::Publisher<podracer_interfaces::msg::MSG_FILE>::SharedPtr publisher_PUBLISHER_NAME;
+  rclcpp::Publisher<MSG_PKG::msg::MSG_FILE>::SharedPtr publisher_PUBLISHER_NAME;
 #####LOOPEND
 
   size_t count_;
@@ -81,11 +81,11 @@ int main(int argc, char * argv[])
   funcVect.push_back ("publish_PUBLISHER_NAME");
 #####LOOPEND
 
-  hndl = khpu("0.0.0.0", 1234,"myusername:mypassword");
+  hndl = khpu("KDB_HOST", PORT,"myusername:mypassword");
   K r = k(hndl,".ros.pubInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::spin(std::make_shared<KDBPublisher>());
   rclcpp::shutdown();
   return 0;
 }

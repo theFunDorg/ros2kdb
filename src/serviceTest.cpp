@@ -24,7 +24,7 @@ class MinimalService : public rclcpp::Node
     void firstFunc(const std::shared_ptr<podracer_interfaces::srv::Serve::Request> request,
               std::shared_ptr<podracer_interfaces::srv::Serve::Response>      response)
     {   
-        K resp=k(hndl,".ros.funcOne",ki( (request->avalu)), ki( (request->bvalu)),(K)0);
+        K resp=k(hndl,".ros.funcOne",ki((request->avalu)), ki((request->bvalu)),(K)0);
         response->cvalu=(resp->f);
     }
 
