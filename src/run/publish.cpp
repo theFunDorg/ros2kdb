@@ -31,7 +31,7 @@ class KDBPublisher : public rclcpp::Node
 {
 public:
   KDBPublisher()
-  : Node("minimal_publisher"), count_(0)
+  : Node("kdb_publisher"), count_(0)
   {
 
     publisher_r_act_ex = this->create_publisher<racer_interfaces::msg::ExhaustInput>("/r_pod/actuate/exhaust", 10);
@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
 
   funcVect.push_back ("publish_l_act_edf");
 
-  hndl = khpu("KDB_HOST", PORT,"myusername:mypassword");
+  hndl = khpu("0.0.0.0", 2345,"myusername:mypassword");
   K r = k(hndl,".ros.pubInit[]",(K)0);
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<KDBPublisher>());

@@ -23,7 +23,7 @@ class KDBService : public rclcpp::Node
 {
  public:
      KDBService()
-     :Node("minimal_service")
+     :Node("kdb_service")
      {
 
          server_l_srv_srv = this->create_service<racer_interfaces::srv::Serve>("kdbFunc", std::bind(&KDBService::func_l_srv_srv, this, _1, _2));
@@ -40,21 +40,23 @@ class KDBService : public rclcpp::Node
               std::shared_ptr<racer_interfaces::srv::Serve::Response>      response)
     {   
         K resp=k(hndl,".ros.Serve" ,ki((request->input_a)),ki((request->input_b)),(K)0);
-        response->;
+        
+    response->output_c=(resp->f);
     }
 
     void func_l_srv_es(const std::shared_ptr<racer_interfaces::srv::EdfState::Request> request,
               std::shared_ptr<racer_interfaces::srv::EdfState::Response>      response)
     {   
         K resp=k(hndl,".ros.edfState" ,kstr((request->action)),(K)0);
-        response->;
+        
+    response->successs=(resp->f);
     }
 
     void func_r_srv_lp(const std::shared_ptr<racer_interfaces::srv::levelPositions::Request> request,
               std::shared_ptr<racer_interfaces::srv::levelPositions::Response>      response)
     {   
         K resp=k(hndl,".ros.levelPositions" ,(K)0);
-        response->;
+        ;
     }
 
 

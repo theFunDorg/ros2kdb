@@ -23,7 +23,7 @@ class KDBService : public rclcpp::Node
 {
  public:
      KDBService()
-     :Node("minimal_service")
+     :Node("kdb_service")
      {
 #####FORLOOP
          server_SERVER_NAME = this->create_service<SRV_PKG::srv::SRV_FILE>("kdbFunc", std::bind(&KDBService::func_SERVER_NAME, this, _1, _2));
@@ -36,7 +36,7 @@ class KDBService : public rclcpp::Node
               std::shared_ptr<SRV_PKG::srv::SRV_FILE::Response>      response)
     {   
         K resp=k(hndl,"KDB_FUNC_NAME" KDB_REQUEST_CONVERTOR,(K)0);
-        response->KDB_RESPONSE_CONVERTOR;
+        KDB_RESPONSE_CONVERTOR;
     }
 #####LOOPEND
 

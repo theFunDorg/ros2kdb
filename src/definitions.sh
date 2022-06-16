@@ -94,6 +94,44 @@ svcNameToKdbFunc["r_srv_lp"]=".ros.levelPositions";
 svcNameToKdbFunc["l_srv_es"]=".ros.edfState";
 svcNameToKdbFunc["l_srv_srv"]=".ros.Serve";
 
+
+## ================================================================================================== ##
+# Client names 
+## ================================================================================================== ##
+# Client names are used as the key for all values. 
+# These are:
+# * The topic's name
+# * The name of the message file
+# * The header file for a given message file in C++ (TODO: Remove need for this variable and create in bash)
+
+
+## Client names for given Client
+
+declare -A clntNameToService;
+clntNameToService["r_srv_lp"]="\/r_pod\/service\/lvPosns";
+clntNameToService["l_srv_es"]="\/l_pod\/service\/edfSt";
+clntNameToService["l_srv_srv"]="\/l_pod\/service\/serve";
+
+## Service file names for a given service
+declare -A clntNameToSRV;
+clntNameToSRV["r_srv_lp"]="levelPositions";
+clntNameToSRV["l_srv_es"]="EdfState";
+clntNameToSRV["l_srv_srv"]="Serve";
+
+
+## Service file name in C++ header
+declare -A clntNameToHeaderName;
+clntNameToHeaderName["r_srv_lp"]="level_positions";
+clntNameToHeaderName["l_srv_es"]="edf_state";
+clntNameToHeaderName["l_srv_srv"]="serve";
+
+# KDB function to call if necessary
+declare -A clntNameToKdbFunc;
+clntNameToKdbFunc["r_srv_lp"]="rosLevelPositions";
+clntNameToKdbFunc["l_srv_es"]="rosEdfState";
+clntNameToKdbFunc["l_srv_srv"]="rosServe";
+
+
 ## ================================================================================================== ##
 ## Define the dictionary of datatype to KDB conversion function
 ## ================================================================================================== ##

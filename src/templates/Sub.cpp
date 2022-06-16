@@ -11,16 +11,16 @@
 using std::placeholders::_1;
 
 int hndl;
-class MinimalSubscriber : public rclcpp::Node
+class KDBSubscriber : public rclcpp::Node
 {
   public:
-    MinimalSubscriber()
-    : Node("minimal_subscriber")
+    KDBSubscriber()
+    : Node("kdb_subscriber")
     {
     // Creating the Subscriptions
 #####FORLOOP
       subscription_SUBSCRIPTION_NAME=this->create_subscription<MSG_PKG::msg::MSG_FILE>(
-      "TOPIC_NAME", 10, std::bind(&MinimalSubscriber::callback_SUBSCRIPTION_NAME, this, _1));
+      "TOPIC_NAME", 10, std::bind(&KDBSubscriber::callback_SUBSCRIPTION_NAME, this, _1));
 ######LOOPEND
     }
 
@@ -43,11 +43,11 @@ class MinimalSubscriber : public rclcpp::Node
 int main(int argc, char * argv[])
 {
 
-  hndl = - khpu("localhost", PORT,"myusername:mypassword");
+  hndl = khpu("KDB_HOST", PORT,"KDB_UNAME_PWD");
   K r = k(hndl,".ros.subInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalSubscriber>());
+  rclcpp::spin(std::make_shared<KDBSubscriber>());
   rclcpp::shutdown();
   return 0;
 }

@@ -9,7 +9,7 @@
 
 // Adding custom message header files
 #####FORLOOP
-#include "SRV_PKG/srv/SRV_FILE.hpp"
+#include "CLNT_PKG/srv/SRV_FILE.hpp"
 ######LOOPEND
 
 
@@ -32,31 +32,36 @@ int checkString (std::string inp, std::vector<std::string> vct)
 using namespace std::chrono_literals;
 
 
-class MinimalClient : public rclcpp::Node
+class KDBClient : public rclcpp::Node
 {
 public:
-  MinimalClient()
-  : Node("minimal_client")
+  KDBClient()
+  : Node("kdb_client")
   {
 #####FORLOOP
-    client_=this->create_client<podracer_interfaces::srv::Serve>("kdbFunc");
+    client_CLIENT_NAME=this->create_client<CLNT_PKG::srv::SRV_NAME>("client_CLIENT_NAME");
 ######LOOPEND
-    timer_ = this->create_wall_timer(0ms, std::bind(&MinimalClient::timer_callback, this));
+    timer_ = this->create_wall_timer(0ms, std::bind(&KDBClient::timer_callback, this));
   }
 
 private:
 #####FORLOOP
-  void func_client_serve_kdb(K data) 
+  void func_client_CLIENT_NAME(K data) 
   { 
-    auto request = std::make_shared<podracer_interfaces::srv::Serve::Request>();
+    auto request = std::make_shared<CLNT_PKG::srv::SRV_NAME::Request>();
       request->avalu = kI(data)[0];
       request->bvalu = kI(data)[1];
+
+      KDB_CLIENT_REQUEST_CONVERTOR
+
     // Wait for the result.
     using ServiceResponseFuture =
-      rclcpp::Client<podracer_interfaces::srv::Serve>::SharedFuture;
+      rclcpp::Client<CLNT_PKG::srv::SRV_NAME>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
         K resp=kf((future.get())->cvalu);
-        k(hndl,"{.ros.clientResponse[`funcServKDB;x]}",resp,(K)0);
+
+        K resp=knk(KDB_CLIENT_RESPONSE_CONVERTOR);
+        k(hndl,"{.ros.clientResponse[`KDB_SRV_NAME;x]}",resp,(K)0);
       };
     client_serve_kdb->async_send_request(request,response_received_callback);
   }
@@ -70,7 +75,7 @@ private:
     switch( checkString( topic->s , funcVect ) ) {
 #####FORLOOP
         case INDEX :
-           func_client_serve_kdb(data);
+           func_client_CLIENT_NAME(data);
            break; 
 ######LOOPEND
        default :
@@ -79,21 +84,21 @@ private:
   }
   rclcpp::TimerBase::SharedPtr timer_;
 #####FORLOOP
-  rclcpp::Client<podracer_interfaces::srv::Serve>::SharedPtr client_serve_kdb;  
+  rclcpp::Client<CLNT_PKG::srv::SRV_NAME>::SharedPtr client_CLIENT_NAME;  
 ######LOOPEND
 
 };
 int main(int argc, char * argv[])
 {
 #####FORLOOP
-  funcVect.push_back ("func_client_serve_kdb");
+  funcVect.push_back ("func_client_CLIENT_NAME");
 ######LOOPEND
 
-  hndl = - khpu("0.0.0.0", PORT,"myusername:mypassword");
+  hndl = khpu("KDB_HOST", PORT,"KDB_UNAME_PWD");
   K r = k(hndl,".ros.clientInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalClient>());
+  rclcpp::spin(std::make_shared<KDBClient>());
   rclcpp::shutdown();
   return 0;
 }

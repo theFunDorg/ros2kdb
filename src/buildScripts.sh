@@ -57,13 +57,18 @@ for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
   keyName=`basename ${i::-4}`
   serverRequest[$keyName]="";
   serverResponse[$keyName]="";
+  clientRequest[$keyName]="";
+  clientResponse[$keyName]="";
+
   index=0;
-  fieldType="request"
+  fieldType="request";
   for line in $(cat < "$i"); do
-    if [[ $line == "---"* ]];
+    echo $line;
+    if [[ $line == *"---"* ]];
         then 
         fieldType="response";
-        break;
+        index=0;
+        continue;
     fi
     echo $keyName;
     type=`echo $line |cut -f 1`;
@@ -75,13 +80,21 @@ for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
     if [[ $fieldType == "request"* ]];
       then 
       serverRequest[$keyName]=${serverRequest[$keyName]}","${CtoKDBConvertor[$type]}"((request->"$name"))";
+
+      clientRequest[$keyName]=${clientRequest[$keyName]}"\n      request->"$name" = "${KDBToCConvertor[$type]}"(data)["${index}"];";
+      
       else
+      
       serverResponse[$keyName]=${serverResponse[$keyName]}"\n    response->"$name"=(resp->"${KDBToCAccessor[$type]}")";
+      clientResponse[$keyName]=${clientResponse[$keyName]}", "${CtoKDBConvertor[$type]}"("$unnumberedType"((future.get())->"$name")";
       echo ${serverResponse[$keyName]};
     fi
 
     index=$(( index+1 ));
   done
+  clientResponse[$keyName]=${index}${clientResponse[$keyName]}
+  echo "";
+  echo "";
   serverRequest[$keyName]=${serverRequest[$keyName]}
   serverResponse[$keyName]=${serverResponse[$keyName]}
   done
@@ -174,12 +187,14 @@ for i in "${SubCodeDict[@]}"; do
             s/TOPIC_NAME/$TOPIC_NAME/g
             s/HEADER_NAME/$HEADER_NAME/g
             s/MSG_PKG/$MSG_PKG/g
-            s/KDB_HOST/$KDB_HOST/g
-            s/PORT/$KDB_SUB_PORT/g
             "| grep -v "####*"
         done
     else
-    echo -e $i| grep -v "####*"
+    echo -e $i|sed -e "
+    s/KDB_HOST/$KDB_HOST/g
+    s/PORT/$KDB_SUB_PORT/g
+    s/KDB_UNAME_PWD/$KDB_UNAME_PWD/g
+    "| grep -v "####*"
   fi
 done >./src/run/subscribe.cpp
 
@@ -207,14 +222,16 @@ for i in "${PubCodeDict[@]}"; do
             s/HEADER_NAME/$HEADER_NAME/g
             s/INDEX/$index/g
             s/MSG_PKG/$MSG_PKG/g
-            s/KDB_HOST/$KDB_HOST/g
-            s/PORT/$KDB_PUB_PORT/g
             "| grep -v "####*"
 
             index=$(( index+1 ));
         done
     else
-    echo -e $i| grep -v "####*"
+    echo -e $i|sed -e "
+    s/KDB_HOST/$KDB_HOST/g
+    s/PORT/$KDB_PUB_PORT/g
+    s/KDB_UNAME_PWD/$KDB_UNAME_PWD/g
+    "| grep -v "####*"
   fi
 done >./src/run/publish.cpp
 
@@ -271,30 +288,40 @@ for i in "${ClntCodeDict[@]}"; do
   if [[ $i == *"#####FORLOOP"* ]];
     then 
         index=0
-        for keyVal in "${!svcNameToService[@]}";
+        for keyVal in "${!clntNameToService[@]}";
         do
             CLIENT_NAME=$keyVal
-            SRV_FILE=${svcNameToSRV[$keyVal]}
-            TOPIC_NAME=${svcNameToService[$keyVal]}
+            SRV_FILE=${clntNameToHeaderName[$keyVal]}
+            SRV_NAME=${clntNameToSRV[$keyVal]}
+            TOPIC_NAME=${clntNameToService[$keyVal]}
             KDB_PARAM_LIST=${svcNameToCFunc[$MSG_FILE]}
             HEADER_NAME=${svcNameToHeaderName[$keyVal]}
-            KDB_FUNC_NAME=${svcNameToKdbFunc[$keyVal]}
+            KDB_SRV_NAME=${clntNameToKdbFunc[$keyVal]}
+            KDB_CLIENT_REQUEST_CONVERTOR=${clientRequest[$SRV_FILE]}
+            KDB_CLIENT_RESPONSE_CONVERTOR=${clientResponse[$SRV_FILE]}
+
             echo -e $i|sed -e "
             s/CLIENT_NAME/$CLIENT_NAME/g
             s/SRV_FILE/$SRV_FILE/g
+            s/SRV_NAME/$SRV_NAME/g
             s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
             s/TOPIC_NAME/$TOPIC_NAME/g
             s/HEADER_NAME/$HEADER_NAME/g
             s/INDEX/$index/g
-            s/SRV_PKG/$SRV_PKG/g
-            s/KDB_HOST/$KDB_HOST/g
-            s/PORT/$KDB_CLNT_PORT/g
+            s/CLNT_PKG/$SRV_PKG/g
+            s/KDB_SRV_NAME/$KDB_SRV_NAME/g            
+            s/KDB_CLIENT_REQUEST_CONVERTOR/$KDB_CLIENT_REQUEST_CONVERTOR/g
+            s/KDB_CLIENT_RESPONSE_CONVERTOR/$KDB_CLIENT_RESPONSE_CONVERTOR/g
             "| grep -v "####*"
 
             index=$(( index+1 ));
         done
     else
-    echo -e $i| grep -v "####*"
+    echo -e $i|sed -e "
+    s/KDB_HOST/$KDB_HOST/g
+    s/PORT/$KDB_CLNT_PORT/g
+    s/KDB_UNAME_PWD/$KDB_UNAME_PWD/g
+    "| grep -v "####*"
   fi
 done >./src/run/client.cpp
 

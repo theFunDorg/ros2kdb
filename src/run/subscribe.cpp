@@ -11,19 +11,19 @@
 
 using std::placeholders::_1;
 int hndl;
-class MinimalSubscriber : public rclcpp::Node
+class KDBSubscriber : public rclcpp::Node
 {
   public:
-    MinimalSubscriber()
-    : Node("minimal_subscriber")
+    KDBSubscriber()
+    : Node("kdb_subscriber")
     {
     // Creating the Subscriptions
 
       subscription_r_act_ex=this->create_subscription<racer_interfaces::msg::ExhaustInput>(
-      "/r_pod/actuate/exhaust", 10, std::bind(&MinimalSubscriber::callback_r_act_ex, this, _1));
+      "/r_pod/actuate/exhaust", 10, std::bind(&KDBSubscriber::callback_r_act_ex, this, _1));
 
       subscription_l_act_edf=this->create_subscription<racer_interfaces::msg::EdfInput>(
-      "/l_pod/actuate/edf", 10, std::bind(&MinimalSubscriber::callback_l_act_edf, this, _1));
+      "/l_pod/actuate/edf", 10, std::bind(&KDBSubscriber::callback_l_act_edf, this, _1));
 
     }
   private:
@@ -49,10 +49,10 @@ class MinimalSubscriber : public rclcpp::Node
     };
 int main(int argc, char * argv[])
 {
-  hndl = - khpu("localhost", PORT,"myusername:mypassword");
+  hndl = khpu("0.0.0.0", 1234,"myusername:mypassword");
   K r = k(hndl,".ros.subInit[]",(K)0);
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalSubscriber>());
+  rclcpp::spin(std::make_shared<KDBSubscriber>());
   rclcpp::shutdown();
   return 0;
 }

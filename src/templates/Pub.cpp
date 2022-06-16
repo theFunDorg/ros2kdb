@@ -32,7 +32,7 @@ class KDBPublisher : public rclcpp::Node
 {
 public:
   KDBPublisher()
-  : Node("minimal_publisher"), count_(0)
+  : Node("kdb_publisher"), count_(0)
   {
 #####FORLOOP
     publisher_PUBLISHER_NAME = this->create_publisher<MSG_PKG::msg::MSG_FILE>("TOPIC_NAME", 10);
@@ -81,7 +81,7 @@ int main(int argc, char * argv[])
   funcVect.push_back ("publish_PUBLISHER_NAME");
 #####LOOPEND
 
-  hndl = khpu("KDB_HOST", PORT,"myusername:mypassword");
+  hndl = khpu("KDB_HOST", PORT,"KDB_UNAME_PWD");
   K r = k(hndl,".ros.pubInit[]",(K)0);
 
   rclcpp::init(argc, argv);
