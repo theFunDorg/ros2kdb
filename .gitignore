@@ -38,4 +38,6 @@
 ./install/*
 ./build/*
 ./log/*
+
+# Package-specific directories
 ./src/run/*

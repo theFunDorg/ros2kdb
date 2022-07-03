@@ -7,10 +7,10 @@ Handles:
 * KDB Server responds to Service request
 
 # Installation Instructions
-bash ./src/buildPublisher.sh 1 ./src/definitions.sh
-bash ./src/buildSubscriber.sh 1 ./src/definitions.sh
-bash ./src/buildClient.sh 1 ./src/definitions.sh
-bash ./src/buildServer.sh 1 ./src/definitions.sh
+bash ./src/buildPublisher.sh 1 ./src/definitions.sh;
+bash ./src/buildSubscriber.sh 1 ./src/definitions.sh;
+bash ./src/buildClient.sh 1 ./src/definitions.sh;
+bash ./src/buildServer.sh 1 ./src/definitions.sh;
 
 # Instructions
 cd ~/cloud/ros_ws
