@@ -19,14 +19,14 @@ using std::placeholders::_8;
 
 int hndl;
 
-class KDBService : public rclcpp::Node
+class KDBServer : public rclcpp::Node
 {
  public:
-     KDBService()
+     KDBServer()
      :Node("kdb_service")
      {
 #####FORLOOP
-         server_SERVER_NAME = this->create_service<SRV_PKG::srv::SRV_FILE>("kdbFunc", std::bind(&KDBService::func_SERVER_NAME, this, _1, _2));
+         server_SERVER_NAME = this->create_service<SRV_PKG::srv::SRV_FILE>("kdbFunc", std::bind(&KDBServer::func_SERVER_NAME, this, _1, _2));
 #####LOOPEND
      }
  
@@ -52,6 +52,6 @@ int main(int argc, char **argv)
   K r = k(hndl,".ros.servInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBService>());
+  rclcpp::spin(std::make_shared<KDBServer>());
   rclcpp::shutdown();
 }

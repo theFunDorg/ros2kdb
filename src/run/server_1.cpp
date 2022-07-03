@@ -19,18 +19,18 @@ using std::placeholders::_6;
 using std::placeholders::_7;
 using std::placeholders::_8;
 int hndl;
-class KDBService : public rclcpp::Node
+class KDBServer_1 : public rclcpp::Node
 {
  public:
-     KDBService()
+     KDBServer_1()
      :Node("kdb_service")
      {
 
-         server_l_srv_srv = this->create_service<racer_interfaces::srv::Serve>("kdbFunc", std::bind(&KDBService::func_l_srv_srv, this, _1, _2));
+         server_l_srv_srv = this->create_service<racer_interfaces::srv::Serve>("kdbFunc", std::bind(&KDBServer::func_l_srv_srv, this, _1, _2));
 
-         server_l_srv_es = this->create_service<racer_interfaces::srv::EdfState>("kdbFunc", std::bind(&KDBService::func_l_srv_es, this, _1, _2));
+         server_l_srv_es = this->create_service<racer_interfaces::srv::EdfState>("kdbFunc", std::bind(&KDBServer::func_l_srv_es, this, _1, _2));
 
-         server_r_srv_lp = this->create_service<racer_interfaces::srv::LevelPositions>("kdbFunc", std::bind(&KDBService::func_r_srv_lp, this, _1, _2));
+         server_r_srv_lp = this->create_service<racer_interfaces::srv::LevelPositions>("kdbFunc", std::bind(&KDBServer::func_r_srv_lp, this, _1, _2));
 
      }
  
@@ -39,7 +39,7 @@ class KDBService : public rclcpp::Node
     void func_l_srv_srv(const std::shared_ptr<racer_interfaces::srv::Serve::Request> request,
               std::shared_ptr<racer_interfaces::srv::Serve::Response>      response)
     {   
-        K resp=k(hndl,".ros.Serve" ,ki((request->input_a)),ki((request->input_b)),(K)0);
+        K resp=k(hndl,".ros.Serve" ,kj((request->input_a)),kj((request->input_b)),(K)0);
         
     response->output_c=(resp->f);
     }
@@ -47,17 +47,17 @@ class KDBService : public rclcpp::Node
     void func_l_srv_es(const std::shared_ptr<racer_interfaces::srv::EdfState::Request> request,
               std::shared_ptr<racer_interfaces::srv::EdfState::Response>      response)
     {   
-        K resp=k(hndl,".ros.edfState" ,kS((request->action)),(K)0);
+        K resp=k(hndl,".ros.edfState" ,ks((request->action)),(K)0);
         
-    response->successs=(resp->f);
+    response->successs=(resp->h);
     }
 
     void func_r_srv_lp(const std::shared_ptr<racer_interfaces::srv::LevelPositions::Request> request,
               std::shared_ptr<racer_interfaces::srv::LevelPositions::Response>      response)
     {   
-        K resp=k(hndl,".ros.levelPositions" ,kb((request->exec)),(K)0);
+        K resp=k(hndl,".ros.levelPositions" ,kh((request->exec)),(K)0);
         
-    response->successs=(resp->f);
+    response->successs=(resp->h);
     }
 
 
@@ -73,6 +73,6 @@ int main(int argc, char **argv)
   hndl = khpu("0.0.0.0", 3456,"myusername:mypassword");
   K r = k(hndl,".ros.servInit[]",(K)0);
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBService>());
+  rclcpp::spin(std::make_shared<KDBServer_1>());
   rclcpp::shutdown();
 }

@@ -33,3 +33,9 @@
 # VSCode files
 */.vscode
 .vscode
+
+# ROS2 Directories
+./install/*
+./build/*
+./log/*
+./src/run/*

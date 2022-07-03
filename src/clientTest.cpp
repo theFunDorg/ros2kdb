@@ -101,6 +101,7 @@ int main(int argc, char * argv[])
 {
   funcVect.push_back ("func_client_serve_kdb");
   funcVect.push_back ("func_client_serve_cpp");
+  
   hndl = - khpu("0.0.0.0", 4567,"myusername:mypassword");
   K r = k(hndl,".ros.clientInit[]",(K)0);
 

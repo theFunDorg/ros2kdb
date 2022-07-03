@@ -123,17 +123,88 @@ clntNameToKdbFunc["l_srv_srv"]="rosServe";
 ## Define the dictionary of datatype to KDB conversion function
 ## ================================================================================================== ##
 
+## Array mapping ROS2 message file datatype to its KDB variable creator
 declare -A CtoKDBConvertor;
-declare -A KDBToCConvertor;
-
+  ## ROS2 Messages use uint8 datatype for booleans
+CtoKDBConvertor["bool"]="kh";
+CtoKDBConvertor["int8"]="kh";
+CtoKDBConvertor["uint8"]="kh";
+CtoKDBConvertor["int16"]="kh";
+CtoKDBConvertor["uint16"]="kh";
+CtoKDBConvertor["int32"]="ki";
+CtoKDBConvertor["uint32"]="ki";
+CtoKDBConvertor["int64"]="kj";
+CtoKDBConvertor["uint64"]="kj";
+CtoKDBConvertor["float32"]="kf";
 CtoKDBConvertor["float64"]="kf";
-CtoKDBConvertor["int64"]="ki";
-CtoKDBConvertor["string"]="kS";
-CtoKDBConvertor["bool"]="kb";
+  ## ROS2 messages use X for strings
+CtoKDBConvertor["string"]="ks";
 
+
+## Array mapping ROS2 message file datatype to its KDB list accessor
+declare -A KDBToCConvertor;
+  ## ROS2 Messages use uint8 datatype for booleans
+KDBToCConvertor["bool"]="kH";
+KDBToCConvertor["int8"]="kH";
+KDBToCConvertor["uint8"]="kH";
+KDBToCConvertor["int16"]="kH";
+KDBToCConvertor["uint16"]="kH";
+KDBToCConvertor["int32"]="kI";
+KDBToCConvertor["uint32"]="kI";
+KDBToCConvertor["int64"]="kJ";
+KDBToCConvertor["uint64"]="kJ";
+KDBToCConvertor["float32"]="kF";
 KDBToCConvertor["float64"]="kF";
-KDBToCConvertor["int64"]="kI";
-KDBToCConvertor["string"]="kS";
-KDBToCConvertor["bool"]="kb";
+  ## ROS2 messages use X for strings
+KDBToCConvertor["string"]="S";
 
-KDBToCAccessor["float"]="f";
+## Array mapping ROS2 message file datatype to its KDB variable accessor
+declare -A KDBToCAccessor;
+  ## ROS2 Messages use uint8 datatype for booleans
+KDBToCAccessor["bool"]="h";
+KDBToCAccessor["int8"]="h";
+KDBToCAccessor["uint8"]="h";
+KDBToCAccessor["int16"]="h";
+KDBToCAccessor["uint16"]="h";
+KDBToCAccessor["int32"]="i";
+KDBToCAccessor["uint32"]="i";
+KDBToCAccessor["int64"]="j";
+KDBToCAccessor["uint64"]="j";
+KDBToCAccessor["float32"]="f";
+KDBToCAccessor["float64"]="f";
+  ## ROS2 messages use X for strings
+KDBToCAccessor["string"]="s";
+
+# TYPE  LA     VC    AA
+#short  kH()   kh()  ->h
+#int    kI()   ki()  ->i
+#long   kJ()   kj()  ->j
+#float  kF()   kf()  ->f
+
+
+##ROS2 DATATYPES TO MANAGE!!
+#Primitive Type	Serialization	         C++	         KDB+   
+#bool (1)	unsigned 8-bit int	         uint8_t (2)     short
+#int8	    signed 8-bit int	         int8_t	int      short
+#uint8	    unsigned 8-bit int	         uint8_t	     short
+#int16	    signed 16-bit int	         int16_t	     short
+#uint16	    unsigned 16-bit int	         uint16_t	     short
+
+#int32	    signed 32-bit int	         int32_t	     int
+#uint32	    unsigned 32-bit int	         uint32_t	     int
+#int64	    signed 64-bit int	         int64_t	     long
+#uint64	    unsigned 64-bit int	         uint64_t	     long
+#float32    32-bit IEEE float	         float	float	 float
+#float64    64-bit IEEE float	         double	float	 float
+#string	    ascii string (4)	         std::string     ???
+
+# bool
+# byte
+# char
+# string
+# time
+# secs/nsecs unsigned 32-bit ints
+# ros::Time
+# duration
+# secs/nsecs signed 32-bit ints
+# ros::Duration

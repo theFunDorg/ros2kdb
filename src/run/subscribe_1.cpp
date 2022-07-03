@@ -11,10 +11,10 @@
 
 using std::placeholders::_1;
 int hndl;
-class KDBSubscriber : public rclcpp::Node
+class KDBSubscriber_1 : public rclcpp::Node
 {
   public:
-    KDBSubscriber()
+    KDBSubscriber_1()
     : Node("kdb_subscriber")
     {
     // Creating the Subscriptions
@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
   hndl = khpu("0.0.0.0", 1234,"myusername:mypassword");
   K r = k(hndl,".ros.subInit[]",(K)0);
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBSubscriber>());
+  rclcpp::spin(std::make_shared<KDBSubscriber_1>());
   rclcpp::shutdown();
   return 0;
 }

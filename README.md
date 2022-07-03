@@ -1,5 +1,16 @@
 # ROS2KDB
-Generic ROS2 pub/sub api for KDB
+Generic ROS2 API for KDB. 
+Handles:
+* Publish KDB messages
+* Subscribe KDB messages
+* KDB Client requests Service response
+* KDB Server responds to Service request
+
+# Installation Instructions
+bash ./src/buildPublisher.sh 1 ./src/definitions.sh
+bash ./src/buildSubscriber.sh 1 ./src/definitions.sh
+bash ./src/buildClient.sh 1 ./src/definitions.sh
+bash ./src/buildServer.sh 1 ./src/definitions.sh
 
 # Instructions
 cd ~/cloud/ros_ws

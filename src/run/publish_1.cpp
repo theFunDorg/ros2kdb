@@ -3,20 +3,20 @@
 #include <memory>
 #include <vector>
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+//#include "std_msgs/msg/string.hpp"
 #define KXVER 3
 #include "k.h"
 // Adding custom message header files
 
-#include "podracer_interfaces/msg/exhaust_input.hpp"
-#include "podracer_interfaces/msg/edf_input.hpp"
+#include "racer_interfaces/msg/exhaust_input.hpp"
+
+#include "racer_interfaces/msg/edf_input.hpp"
 
 int hndl;
 K response;
 K data;
 K topic;
 std::vector<std::string> funcVect;
-
 int checkString (std::string inp, std::vector<std::string> vct)
 {
   for(unsigned int i = 0; i < vct.size(); i++) {
@@ -26,28 +26,26 @@ int checkString (std::string inp, std::vector<std::string> vct)
   }
   return 4;
 };
-
 using namespace std::chrono_literals;
-
-class MinimalPublisher : public rclcpp::Node
+class KDBPublisher_1 : public rclcpp::Node
 {
 public:
-  MinimalPublisher()
-  : Node("minimal_publisher"), count_(0)
+  KDBPublisher_1()
+  : Node("kdb_publisher"), count_(0)
   {
 
-    publisher_r_act_ex = this->create_publisher<podracer_interfaces::msg::ExhaustInput>("/r_pod/actuate/exhaust", 10);
-    publisher_l_act_edf = this->create_publisher<podracer_interfaces::msg::EdfInput>("/l_pod/actuate/edf", 10);
+    publisher_r_act_ex = this->create_publisher<racer_interfaces::msg::ExhaustInput>("/r_pod/actuate/exhaust", 10);
 
-    timer_ = this->create_wall_timer(20ms, std::bind(&MinimalPublisher::timer_callback, this));
+    publisher_l_act_edf = this->create_publisher<racer_interfaces::msg::EdfInput>("/l_pod/actuate/edf", 10);
 
+    timer_ = this->create_wall_timer(0ms, std::bind(&KDBPublisher_1::timer_callback, this));
   }
+private:
 
-// ======================================================================
   void publish_r_act_ex(K data) 
   { 
-    RCLCPP_INFO(this->get_logger(), "Running publish_r_act_ex");
-    auto msg = podracer_interfaces::msg::ExhaustInput();
+    auto msg = racer_interfaces::msg::ExhaustInput();
+    
     msg.tl_spd=kF(data)[0];
     msg.tr_spd=kF(data)[1];
     msg.bl_spd=kF(data)[2];
@@ -61,48 +59,50 @@ public:
 
   void publish_l_act_edf(K data) 
   { 
-    RCLCPP_INFO(this->get_logger(), "Running publish_l_act_edf");
-    auto msg = podracer_interfaces::msg::EdfInput();
+    auto msg = racer_interfaces::msg::EdfInput();
+    
     msg.speed=kF(data)[0];
     publisher_l_act_edf->publish(msg);
-    RCLCPP_INFO(this->get_logger(), "Sent off to topic!");
   }
-// ======================================================================
 
-private:
   void timer_callback()
   {
     response= k(hndl, (S) 0); 
     topic=kK(response)[0];
     data=kK(response)[1]; 
     switch( checkString( topic->s , funcVect ) ) {
+
         case 0 :
            publish_r_act_ex(data);
            break; 
+
         case 1 :
            publish_l_act_edf(data);
-           break;
+           break; 
+
        default :
            RCLCPP_INFO(this->get_logger(), "string out of range");
     }
   }
-
   rclcpp::TimerBase::SharedPtr timer_;
 
-  rclcpp::Publisher<podracer_interfaces::msg::ExhaustInput>::SharedPtr publisher_r_act_ex;
-  rclcpp::Publisher<podracer_interfaces::msg::EdfInput>::SharedPtr publisher_l_act_edf;
+  rclcpp::Publisher<racer_interfaces::msg::ExhaustInput>::SharedPtr publisher_r_act_ex;
+
+  rclcpp::Publisher<racer_interfaces::msg::EdfInput>::SharedPtr publisher_l_act_edf;
 
   size_t count_;
 };
 int main(int argc, char * argv[])
 {
+
   funcVect.push_back ("publish_r_act_ex");
+
   funcVect.push_back ("publish_l_act_edf");
 
-  hndl = khpu("0.0.0.0", 1234,"myusername:mypassword");
-  k(hndl,".ros.pubInit[]",(K)0);
+  hndl = khpu("0.0.0.0", 2345,"myusername:mypassword");
+  K r = k(hndl,".ros.pubInit[]",(K)0);
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::spin(std::make_shared<KDBPublisher_1>());
   rclcpp::shutdown();
   return 0;
 }

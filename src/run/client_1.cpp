@@ -30,10 +30,10 @@ int checkString (std::string inp, std::vector<std::string> vct)
   return 999;
 };
 using namespace std::chrono_literals;
-class KDBClient : public rclcpp::Node
+class KDBClient_1 : public rclcpp::Node
 {
 public:
-  KDBClient()
+  KDBClient_1()
   : Node("kdb_client")
   {
 
@@ -43,7 +43,7 @@ public:
 
     client_r_srv_lp=this->create_client<racer_interfaces::srv::LevelPositions>("client_r_srv_lp");
 
-    timer_ = this->create_wall_timer(0ms, std::bind(&KDBClient::timer_callback, this));
+    timer_ = this->create_wall_timer(0ms, std::bind(&KDBClient_1::timer_callback, this));
   }
 private:
 
@@ -51,8 +51,8 @@ private:
   { 
     auto request = std::make_shared<racer_interfaces::srv::Serve::Request>();
       
-      request->input_a = kI(data)[0];
-      request->input_b = kI(data)[1];
+      request->input_a = kJ(data)[0];
+      request->input_b = kJ(data)[1];
     // Wait for the result.
     using ServiceResponseFuture =
       rclcpp::Client<racer_interfaces::srv::Serve>::SharedFuture;
@@ -68,13 +68,13 @@ private:
   { 
     auto request = std::make_shared<racer_interfaces::srv::EdfState::Request>();
       
-      request->action = kS(data)[0];
+      request->action = S(data)[0];
     // Wait for the result.
     using ServiceResponseFuture =
       rclcpp::Client<racer_interfaces::srv::EdfState>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
       
-        K resp=knk(1, kb(((future.get())->successs)));
+        K resp=knk(1, kh(((future.get())->successs)));
         k(hndl,"{.ros.clientResponse[`KDB_EdfState;x]}",resp,(K)0);
       };
     client_l_srv_es->async_send_request(request,response_received_callback);
@@ -84,13 +84,13 @@ private:
   { 
     auto request = std::make_shared<racer_interfaces::srv::LevelPositions::Request>();
       
-      request->exec = kb(data)[0];
+      request->exec = kH(data)[0];
     // Wait for the result.
     using ServiceResponseFuture =
       rclcpp::Client<racer_interfaces::srv::LevelPositions>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
       
-        K resp=knk(1, kb(((future.get())->successs)));
+        K resp=knk(1, kh(((future.get())->successs)));
         k(hndl,"{.ros.clientResponse[`KDB_LevelPositions;x]}",resp,(K)0);
       };
     client_r_srv_lp->async_send_request(request,response_received_callback);
@@ -140,7 +140,7 @@ int main(int argc, char * argv[])
   hndl = khpu("0.0.0.0", 4567,"myusername:mypassword");
   K r = k(hndl,".ros.clientInit[]",(K)0);
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBClient>());
+  rclcpp::spin(std::make_shared<KDBClient_1>());
   rclcpp::shutdown();
   return 0;
 }
