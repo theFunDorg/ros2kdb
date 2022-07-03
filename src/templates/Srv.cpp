@@ -4,7 +4,7 @@
 #include "k.h"
 
 #####FORLOOP
-#include "SRV_PKG/srv/SRV_FILE.hpp"
+#include "SRV_PKG/srv/HEADER_NAME.hpp"
 #####LOOPEND
 
 using std::placeholders::_1;

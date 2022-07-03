@@ -49,21 +49,17 @@ private:
   void func_client_CLIENT_NAME(K data) 
   { 
     auto request = std::make_shared<CLNT_PKG::srv::SRV_NAME::Request>();
-      request->avalu = kI(data)[0];
-      request->bvalu = kI(data)[1];
-
       KDB_CLIENT_REQUEST_CONVERTOR
 
     // Wait for the result.
     using ServiceResponseFuture =
       rclcpp::Client<CLNT_PKG::srv::SRV_NAME>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
-        K resp=kf((future.get())->cvalu);
-
+      
         K resp=knk(KDB_CLIENT_RESPONSE_CONVERTOR);
         k(hndl,"{.ros.clientResponse[`KDB_SRV_NAME;x]}",resp,(K)0);
       };
-    client_serve_kdb->async_send_request(request,response_received_callback);
+    client_CLIENT_NAME->async_send_request(request,response_received_callback);
   }
 ######LOOPEND
 

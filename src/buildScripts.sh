@@ -18,6 +18,10 @@ IFS=$'\n'       # make newlines the only separator
 declare -A subNameToKDBFunc;  ## Dictionary of functions that convert C data to KDB
 declare -A subNameToCFunc;  ## Dictionary of functions that convert KDB to C data
 
+declare -A subTopic;  ## Dictionary of functions that convert C data to KDB
+declare -A pubTopic;  ## Dictionary of functions that convert KDB to C data
+
+
 for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/msg/*.msg`; do
   keyName=`basename ${i::-4}`
   subNameToKDBFunc[$keyName]="$((1+`cat $i|wc -l`))";
@@ -52,6 +56,9 @@ declare -A svcNameToCFunc;  ## Dictionary of functions that convert KDB to C dat
 declare -A serverRequest;  ## Dictionary of functions that convert C data to KDB
 declare -A serverResponse;  ## Dictionary of functions that convert KDB to C data
 
+declare -A clientRequest;  ## Dictionary of functions that convert C data to KDB
+declare -A clientResponse;  ## Dictionary of functions that convert KDB to C data
+
 
 for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
   keyName=`basename ${i::-4}`
@@ -63,20 +70,15 @@ for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
   index=0;
   fieldType="request";
   for line in $(cat < "$i"); do
-    echo $line;
     if [[ $line == *"---"* ]];
         then 
         fieldType="response";
         index=0;
         continue;
     fi
-    echo $keyName;
     type=`echo $line |cut -f 1`;
-    echo $type;
     name=`echo $line |cut -f 2`;
     unnumberedType=`echo  $varname | sed 's/[0-9]//g'`
-    echo $name;
-    echo $fieldType;
     if [[ $fieldType == "request"* ]];
       then 
       serverRequest[$keyName]=${serverRequest[$keyName]}","${CtoKDBConvertor[$type]}"((request->"$name"))";
@@ -87,14 +89,12 @@ for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
       
       serverResponse[$keyName]=${serverResponse[$keyName]}"\n    response->"$name"=(resp->"${KDBToCAccessor[$type]}")";
       clientResponse[$keyName]=${clientResponse[$keyName]}", "${CtoKDBConvertor[$type]}"("$unnumberedType"((future.get())->"$name")";
-      echo ${serverResponse[$keyName]};
     fi
 
     index=$(( index+1 ));
   done
-  clientResponse[$keyName]=${index}${clientResponse[$keyName]}
-  echo "";
-  echo "";
+  clientResponse[$keyName]=${index}${clientResponse[$keyName]}")";
+  clientRequest[$keyName]=${clientRequest[$keyName]}
   serverRequest[$keyName]=${serverRequest[$keyName]}
   serverResponse[$keyName]=${serverResponse[$keyName]}
   done
@@ -294,11 +294,11 @@ for i in "${ClntCodeDict[@]}"; do
             SRV_FILE=${clntNameToHeaderName[$keyVal]}
             SRV_NAME=${clntNameToSRV[$keyVal]}
             TOPIC_NAME=${clntNameToService[$keyVal]}
-            KDB_PARAM_LIST=${svcNameToCFunc[$MSG_FILE]}
+            KDB_PARAM_LIST=${svcNameToCFunc[$SRV_NAME]}
             HEADER_NAME=${svcNameToHeaderName[$keyVal]}
             KDB_SRV_NAME=${clntNameToKdbFunc[$keyVal]}
-            KDB_CLIENT_REQUEST_CONVERTOR=${clientRequest[$SRV_FILE]}
-            KDB_CLIENT_RESPONSE_CONVERTOR=${clientResponse[$SRV_FILE]}
+            KDB_CLIENT_REQUEST_CONVERTOR=${clientRequest[$SRV_NAME]}
+            KDB_CLIENT_RESPONSE_CONVERTOR=${clientResponse[$SRV_NAME]}
 
             echo -e $i|sed -e "
             s/CLIENT_NAME/$CLIENT_NAME/g

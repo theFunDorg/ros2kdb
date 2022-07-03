@@ -44,7 +44,7 @@ private:
 
   void publish_r_act_ex(K data) 
   { 
-    auto msg = podracer_interfaces::msg::ExhaustInput();
+    auto msg = racer_interfaces::msg::ExhaustInput();
     
     msg.tl_spd=kF(data)[0];
     msg.tr_spd=kF(data)[1];
@@ -59,7 +59,7 @@ private:
 
   void publish_l_act_edf(K data) 
   { 
-    auto msg = podracer_interfaces::msg::EdfInput();
+    auto msg = racer_interfaces::msg::EdfInput();
     
     msg.speed=kF(data)[0];
     publisher_l_act_edf->publish(msg);

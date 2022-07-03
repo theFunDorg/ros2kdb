@@ -44,7 +44,7 @@ private:
 #####FORLOOP
   void publish_PUBLISHER_NAME(K data) 
   { 
-    auto msg = podracer_interfaces::msg::MSG_FILE();
+    auto msg = MSG_PKG::msg::MSG_FILE();
     KDB_PARAM_LIST
     publisher_PUBLISHER_NAME->publish(msg);
   }

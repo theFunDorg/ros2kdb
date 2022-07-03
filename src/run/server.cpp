@@ -4,11 +4,11 @@
 #define KXVER 3
 #include "k.h"
 
-#include "racer_interfaces/srv/Serve.hpp"
+#include "racer_interfaces/srv/serve.hpp"
 
-#include "racer_interfaces/srv/EdfState.hpp"
+#include "racer_interfaces/srv/edf_state.hpp"
 
-#include "racer_interfaces/srv/levelPositions.hpp"
+#include "racer_interfaces/srv/level_positions.hpp"
 
 using std::placeholders::_1;
 using std::placeholders::_2;
@@ -30,7 +30,7 @@ class KDBService : public rclcpp::Node
 
          server_l_srv_es = this->create_service<racer_interfaces::srv::EdfState>("kdbFunc", std::bind(&KDBService::func_l_srv_es, this, _1, _2));
 
-         server_r_srv_lp = this->create_service<racer_interfaces::srv::levelPositions>("kdbFunc", std::bind(&KDBService::func_r_srv_lp, this, _1, _2));
+         server_r_srv_lp = this->create_service<racer_interfaces::srv::LevelPositions>("kdbFunc", std::bind(&KDBService::func_r_srv_lp, this, _1, _2));
 
      }
  
@@ -47,16 +47,17 @@ class KDBService : public rclcpp::Node
     void func_l_srv_es(const std::shared_ptr<racer_interfaces::srv::EdfState::Request> request,
               std::shared_ptr<racer_interfaces::srv::EdfState::Response>      response)
     {   
-        K resp=k(hndl,".ros.edfState" ,kstr((request->action)),(K)0);
+        K resp=k(hndl,".ros.edfState" ,kS((request->action)),(K)0);
         
     response->successs=(resp->f);
     }
 
-    void func_r_srv_lp(const std::shared_ptr<racer_interfaces::srv::levelPositions::Request> request,
-              std::shared_ptr<racer_interfaces::srv::levelPositions::Response>      response)
+    void func_r_srv_lp(const std::shared_ptr<racer_interfaces::srv::LevelPositions::Request> request,
+              std::shared_ptr<racer_interfaces::srv::LevelPositions::Response>      response)
     {   
-        K resp=k(hndl,".ros.levelPositions" ,(K)0);
-        ;
+        K resp=k(hndl,".ros.levelPositions" ,kb((request->exec)),(K)0);
+        
+    response->successs=(resp->f);
     }
 
 
@@ -64,7 +65,7 @@ class KDBService : public rclcpp::Node
 
     rclcpp::Service<racer_interfaces::srv::EdfState>::SharedPtr server_l_srv_es;
 
-    rclcpp::Service<racer_interfaces::srv::levelPositions>::SharedPtr server_r_srv_lp;
+    rclcpp::Service<racer_interfaces::srv::LevelPositions>::SharedPtr server_r_srv_lp;
 
   };
 int main(int argc, char **argv)

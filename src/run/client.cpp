@@ -41,7 +41,7 @@ public:
 
     client_l_srv_es=this->create_client<racer_interfaces::srv::EdfState>("client_l_srv_es");
 
-    client_r_srv_lp=this->create_client<racer_interfaces::srv::levelPositions>("client_r_srv_lp");
+    client_r_srv_lp=this->create_client<racer_interfaces::srv::LevelPositions>("client_r_srv_lp");
 
     timer_ = this->create_wall_timer(0ms, std::bind(&KDBClient::timer_callback, this));
   }
@@ -50,8 +50,6 @@ private:
   void func_client_l_srv_srv(K data) 
   { 
     auto request = std::make_shared<racer_interfaces::srv::Serve::Request>();
-      request->avalu = kI(data)[0];
-      request->bvalu = kI(data)[1];
       
       request->input_a = kI(data)[0];
       request->input_b = kI(data)[1];
@@ -59,49 +57,43 @@ private:
     using ServiceResponseFuture =
       rclcpp::Client<racer_interfaces::srv::Serve>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
-        K resp=kf((future.get())->cvalu);
-        K resp=knk(1, kf(((future.get())->output_c));
+      
+        K resp=knk(1, kf(((future.get())->output_c)));
         k(hndl,"{.ros.clientResponse[`KDB_Serve;x]}",resp,(K)0);
       };
-    client_serve_kdb->async_send_request(request,response_received_callback);
+    client_l_srv_srv->async_send_request(request,response_received_callback);
   }
 
   void func_client_l_srv_es(K data) 
   { 
     auto request = std::make_shared<racer_interfaces::srv::EdfState::Request>();
-      request->avalu = kI(data)[0];
-      request->bvalu = kI(data)[1];
       
-      request->input_a = kI(data)[0];
-      request->input_b = kI(data)[1];
+      request->action = kS(data)[0];
     // Wait for the result.
     using ServiceResponseFuture =
       rclcpp::Client<racer_interfaces::srv::EdfState>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
-        K resp=kf((future.get())->cvalu);
-        K resp=knk(1, kf(((future.get())->output_c));
+      
+        K resp=knk(1, kb(((future.get())->successs)));
         k(hndl,"{.ros.clientResponse[`KDB_EdfState;x]}",resp,(K)0);
       };
-    client_serve_kdb->async_send_request(request,response_received_callback);
+    client_l_srv_es->async_send_request(request,response_received_callback);
   }
 
   void func_client_r_srv_lp(K data) 
   { 
-    auto request = std::make_shared<racer_interfaces::srv::levelPositions::Request>();
-      request->avalu = kI(data)[0];
-      request->bvalu = kI(data)[1];
+    auto request = std::make_shared<racer_interfaces::srv::LevelPositions::Request>();
       
-      request->input_a = kI(data)[0];
-      request->input_b = kI(data)[1];
+      request->exec = kb(data)[0];
     // Wait for the result.
     using ServiceResponseFuture =
-      rclcpp::Client<racer_interfaces::srv::levelPositions>::SharedFuture;
+      rclcpp::Client<racer_interfaces::srv::LevelPositions>::SharedFuture;
     auto response_received_callback = [this](ServiceResponseFuture future) {
-        K resp=kf((future.get())->cvalu);
-        K resp=knk(1, kf(((future.get())->output_c));
-        k(hndl,"{.ros.clientResponse[`KDB_levelPositions;x]}",resp,(K)0);
+      
+        K resp=knk(1, kb(((future.get())->successs)));
+        k(hndl,"{.ros.clientResponse[`KDB_LevelPositions;x]}",resp,(K)0);
       };
-    client_serve_kdb->async_send_request(request,response_received_callback);
+    client_r_srv_lp->async_send_request(request,response_received_callback);
   }
 
   void timer_callback()
@@ -133,7 +125,7 @@ private:
 
   rclcpp::Client<racer_interfaces::srv::EdfState>::SharedPtr client_l_srv_es;  
 
-  rclcpp::Client<racer_interfaces::srv::levelPositions>::SharedPtr client_r_srv_lp;  
+  rclcpp::Client<racer_interfaces::srv::LevelPositions>::SharedPtr client_r_srv_lp;  
 
 };
 int main(int argc, char * argv[])

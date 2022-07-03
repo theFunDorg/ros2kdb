@@ -20,7 +20,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -march=native")
 ## )
 ## add_dependencies(kdbsub buildCppScripts)
 ## add_dependencies(kdbpub buildCppScripts)
-## add_dependencies(kdbsvc buildCppScripts)
+## add_dependencies(kdbsvr buildCppScripts)
 ## add_dependencies(kdbclnt buildCppScripts)
 
 
@@ -30,7 +30,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 #find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
-find_package(podracer_interfaces REQUIRED)
+find_package(racer_interfaces REQUIRED)
 
 ##rosidl_generate_interfaces(ros2kdb
 ##  "msg/Antenna.msg"  
@@ -47,28 +47,32 @@ find_package(podracer_interfaces REQUIRED)
 # find_package(<dependency> REQUIRED)
 
  add_executable(kdbsub 
- 	src/subTest.cpp
+ 	#src/subTest.cpp
+  src/run/subscribe.cpp
  	include/c.o
  	)
- ament_target_dependencies(kdbsub rclcpp std_msgs podracer_interfaces)
+ ament_target_dependencies(kdbsub rclcpp racer_interfaces)
  
  add_executable(kdbpub 
- 	src/pubTest.cpp
+ 	#src/pubTest.cpp
+  src/run/publish.cpp
  	include/c.o
  	)
-   ament_target_dependencies(kdbpub rclcpp std_msgs podracer_interfaces)
+   ament_target_dependencies(kdbpub rclcpp racer_interfaces)
 
-add_executable(kdbsvc 
-	src/serviceTest.cpp
+add_executable(kdbsvr 
+	#src/serviceTest.cpp
+  src/run/server.cpp
 	include/c.o
 	)
-  ament_target_dependencies(kdbsvc rclcpp podracer_interfaces)
+  ament_target_dependencies(kdbsvr rclcpp racer_interfaces)
 
 add_executable(kdbclnt 
-	src/clientTest.cpp
+	#src/clientTest.cpp
+  src/run/client.cpp
 	include/c.o
 	)
-  ament_target_dependencies(kdbclnt rclcpp podracer_interfaces)
+  ament_target_dependencies(kdbclnt rclcpp racer_interfaces)
 
  target_include_directories(kdbsub
  	      PRIVATE
@@ -80,7 +84,7 @@ add_executable(kdbclnt
          "./include"
  	)
 
-target_include_directories(kdbsvc
+target_include_directories(kdbsvr
         PRIVATE
         "./include"
   )
@@ -93,7 +97,7 @@ target_include_directories(kdbsvc
 install(TARGETS
   kdbpub
   kdbsub
-  kdbsvc
+  kdbsvr
   kdbclnt
   DESTINATION lib/${PROJECT_NAME})
 
