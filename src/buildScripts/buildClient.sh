@@ -15,7 +15,7 @@ IFS=$'\n'       # make newlines the only separator
 declare -A clientRequest;  ## Dictionary of functions that convert C data to KDB
 declare -A clientResponse;  ## Dictionary of functions that convert KDB to C data
 
-for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
+for i in `ls $ROS2KDB_DIR/../$SRV_PKG/srv/*.srv`; do
   keyName=`basename ${i::-4}`
   clientRequest[$keyName]="";
   clientResponse[$keyName]="";
@@ -52,7 +52,7 @@ for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
 declare -a ClntCodeDict;
 
 index=1;
-for i in $(cat < "src/templates/Clnt.cpp"); do
+for i in $(cat < "$ROS2KDB_DIR/src/templates/Clnt.cpp"); do
   if [[ $i == "###"* ]];
     then 
     index=$(( index+1 ));
@@ -73,25 +73,24 @@ for i in "${ClntCodeDict[@]}"; do
         for keyVal in "${!clntNameToService[@]}";
         do
             CLIENT_NAME=$keyVal
-            SRV_FILE=${clntNameToHeaderName[$keyVal]}
             SRV_NAME=${clntNameToSRV[$keyVal]}
             TOPIC_NAME=${clntNameToService[$keyVal]}
             KDB_PARAM_LIST=${svcNameToCFunc[$SRV_NAME]}
-            HEADER_NAME=${svcNameToHeaderName[$keyVal]}
+            HEADER_NAME=`echo ${SRV_NAME}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
             KDB_SRV_NAME=${clntNameToKdbFunc[$keyVal]}
             KDB_CLIENT_REQUEST_CONVERTOR=${clientRequest[$SRV_NAME]}
             KDB_CLIENT_RESPONSE_CONVERTOR=${clientResponse[$SRV_NAME]}
 
             echo -e $i|sed -e "
             s/CLIENT_NAME/$CLIENT_NAME/g
-            s/SRV_FILE/$SRV_FILE/g
             s/SRV_NAME/$SRV_NAME/g
             s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
             s/TOPIC_NAME/$TOPIC_NAME/g
             s/HEADER_NAME/$HEADER_NAME/g
             s/INDEX/$index/g
             s/CLNT_PKG/$SRV_PKG/g
-            s/KDB_SRV_NAME/$KDB_SRV_NAME/g            
+            s/KDB_SRV_NAME/$KDB_SRV_NAME/g
+            s/NODE_NAME/$NODE_NAME/g
             s/KDB_CLIENT_REQUEST_CONVERTOR/$KDB_CLIENT_REQUEST_CONVERTOR/g
             s/KDB_CLIENT_RESPONSE_CONVERTOR/$KDB_CLIENT_RESPONSE_CONVERTOR/g
             "| grep -v "####*"
@@ -102,7 +101,7 @@ for i in "${ClntCodeDict[@]}"; do
     echo -e $i|sed -e "
     s/KDB_HOST/$KDB_HOST/g
     s/PORT/$KDB_CLNT_PORT/g
-    s/KDBClient/$NODE_NAME/g
+    s/NODE_NAME/$NODE_NAME/g
     s/KDB_UNAME_PWD/$KDB_UNAME_PWD/g
     "| grep -v "####*"
   fi

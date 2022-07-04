@@ -28,16 +28,16 @@ int checkString (std::string inp, std::vector<std::string> vct)
 
 using namespace std::chrono_literals;
 
-class KDBPublisher : public rclcpp::Node
+class NODE_NAME : public rclcpp::Node
 {
 public:
-  KDBPublisher()
-  : Node("kdb_publisher"), count_(0)
+  NODE_NAME()
+  : Node("NODE_NAME"), count_(0)
   {
 #####FORLOOP
     publisher_PUBLISHER_NAME = this->create_publisher<MSG_PKG::msg::MSG_FILE>("TOPIC_NAME", 10);
 ######LOOPEND    
-    timer_ = this->create_wall_timer(0ms, std::bind(&KDBPublisher::timer_callback, this));
+    timer_ = this->create_wall_timer(0ms, std::bind(&NODE_NAME::timer_callback, this));
   }
 
 private:
@@ -85,7 +85,7 @@ int main(int argc, char * argv[])
   K r = k(hndl,".ros.pubInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBPublisher>());
+  rclcpp::spin(std::make_shared<NODE_NAME>());
   rclcpp::shutdown();
   return 0;
 }

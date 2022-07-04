@@ -15,7 +15,7 @@ IFS=$'\n'       # make newlines the only separator
 declare -A serverRequest;  ## Dictionary of functions that convert C data to KDB
 declare -A serverResponse;  ## Dictionary of functions that convert KDB to C data
 
-for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
+for i in `ls $ROS2KDB_DIR/../$SRV_PKG/srv/*.srv`; do
   keyName=`basename ${i::-4}`
   serverRequest[$keyName]="";
   serverResponse[$keyName]="";
@@ -52,7 +52,7 @@ for i in `ls /home/sean/cloud/ros_ws/src/racer_interfaces/srv/*.srv`; do
 declare -a SrvCodeDict;
 
 index=1;
-for i in $(cat < "src/templates/Srv.cpp"); do
+for i in $(cat < "$ROS2KDB_DIR/src/templates/Srv.cpp"); do
   if [[ $i == "###"* ]];
     then 
     index=$(( index+1 ));
@@ -76,7 +76,7 @@ for i in "${SrvCodeDict[@]}"; do
             SRV_FILE=${svcNameToSRV[$keyVal]}
             TOPIC_NAME=${svcNameToService[$keyVal]}
             KDB_PARAM_LIST=${svcNameToCFunc[$MSG_FILE]}
-            HEADER_NAME=${svcNameToHeaderName[$keyVal]}
+            HEADER_NAME=`echo ${SRV_FILE}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
             KDB_FUNC_NAME=${svcNameToKdbFunc[$keyVal]}
             KDB_REQUEST_CONVERTOR=${serverRequest[$SRV_FILE]}
             KDB_RESPONSE_CONVERTOR=${serverResponse[$SRV_FILE]}
@@ -90,6 +90,7 @@ for i in "${SrvCodeDict[@]}"; do
             s/INDEX/$index/g
             s/SRV_PKG/$SRV_PKG/g
             s/KDB_FUNC_NAME/$KDB_FUNC_NAME/g
+            s/NODE_NAME/$NODE_NAME/g
             s/KDB_REQUEST_CONVERTOR/$KDB_REQUEST_CONVERTOR/g
             s/KDB_RESPONSE_CONVERTOR/$KDB_RESPONSE_CONVERTOR/g
             "| grep -v "####*"
@@ -100,7 +101,7 @@ for i in "${SrvCodeDict[@]}"; do
     echo -e $i|sed -e "
     s/KDB_HOST/$KDB_HOST/g
     s/PORT/$KDB_SRV_PORT/g
-    s/KDBServer/$NODE_NAME/g
+    s/NODE_NAME/$NODE_NAME/g
     s/KDB_UNAME_PWD/$KDB_UNAME_PWD/g
     "| grep -v "####*"
   fi

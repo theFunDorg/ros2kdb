@@ -6,25 +6,36 @@ Handles:
 * KDB Client requests Service response
 * KDB Server responds to Service request
 
-# Installation Instructions
-bash ./src/buildPublisher.sh 1 ./src/definitions.sh;
-bash ./src/buildSubscriber.sh 1 ./src/definitions.sh;
-bash ./src/buildClient.sh 1 ./src/definitions.sh;
-bash ./src/buildServer.sh 1 ./src/definitions.sh;
+## Installation Instructions
 
-# Instructions
-cd ~/cloud/ros_ws
-. install/setup.bash;echo done;ros2 run ros2kdb kdbpub
-. install/setup.bash;echo done;ros2 run ros2kdb kdbsub
-. install/setup.bash;echo done;ros2 run ros2kdb kdbsrv
-. install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
+Set the Package's working directory
 
-q q/ros.q -p 1234 #Topic Publisher
-q q/ros.q -p 2345 #Topic Subscriber
-q q/ros.q -p 3456 #Service Server
-q q/ros.q -p 4567 #Service Client
+    export ROS2KDB_DIR=~/cloud/ros_ws/src/ros2kdb
 
-Right now... 
+Use the below commands to create the C++ scripts
+
+    bash ./src/buildScripts/buildPublisher.sh 1  $ROS2KDB_DIR/src/definitions.sh;
+    bash ./src/buildScripts/buildSubscriber.sh 1 $ROS2KDB_DIR/src/definitions.sh;
+    bash ./src/buildScripts/buildClient.sh 1     $ROS2KDB_DIR/src/definitions.sh;
+    bash ./src/buildScripts/buildServer.sh 1     $ROS2KDB_DIR/src/definitions.sh;
+
+## Instructions
+To run the ROS2 instances, in 4 terminals Run:
+
+    cd $ROS2KDB_DIR/../../
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbpub
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbsub
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbsrv
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
+
+In 4 terminals, run the following:
+
+    q $ROS2KDB_DIR/q/ros.q -p 1234 #Topic Publisher
+    q $ROS2KDB_DIR/q/ros.q -p 2345 #Topic Subscriber
+    q $ROS2KDB_DIR/q/ros.q -p 3456 #Service Server
+    q $ROS2KDB_DIR/q/ros.q -p 4567 #Service Client
+
+```Right now... ```
 
 For Publisher/Subscriber
 Open 4 terminals
@@ -49,13 +60,3 @@ q q/ros.q -p 4567 #Service Client
 . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
 .ros.clientRequest[`func_client_serve_kdb;(1i;2i)]
-
-# TO DO
-* Parameterise the shell script for package, filepaths, etc
-* Correct the shell script to create the correct publisher file
-* Add .ros.send, .ros.receive and add their upsert tables too
-* Add and test different variable types
-* See about creating simple test script
-* Add a parser for the message files to create KDB table schemas
-* Create file with all the dictionary mappings, maybe as part of above parameterising file?
-* add running of shell script to the build job in CMakefile, same with running q script maybe

@@ -11,16 +11,16 @@
 using std::placeholders::_1;
 
 int hndl;
-class KDBSubscriber : public rclcpp::Node
+class NODE_NAME : public rclcpp::Node
 {
   public:
-    KDBSubscriber()
-    : Node("kdb_subscriber")
+    NODE_NAME()
+    : Node("NODE_NAME")
     {
     // Creating the Subscriptions
 #####FORLOOP
       subscription_SUBSCRIPTION_NAME=this->create_subscription<MSG_PKG::msg::MSG_FILE>(
-      "TOPIC_NAME", 10, std::bind(&KDBSubscriber::callback_SUBSCRIPTION_NAME, this, _1));
+      "TOPIC_NAME", 10, std::bind(&NODE_NAME::callback_SUBSCRIPTION_NAME, this, _1));
 ######LOOPEND
     }
 
@@ -47,7 +47,7 @@ int main(int argc, char * argv[])
   K r = k(hndl,".ros.subInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBSubscriber>());
+  rclcpp::spin(std::make_shared<NODE_NAME>());
   rclcpp::shutdown();
   return 0;
 }

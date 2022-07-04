@@ -9,7 +9,7 @@
 
 // Adding custom message header files
 #####FORLOOP
-#include "CLNT_PKG/srv/SRV_FILE.hpp"
+#include "CLNT_PKG/srv/HEADER_NAME.hpp"
 ######LOOPEND
 
 
@@ -32,16 +32,16 @@ int checkString (std::string inp, std::vector<std::string> vct)
 using namespace std::chrono_literals;
 
 
-class KDBClient : public rclcpp::Node
+class NODE_NAME : public rclcpp::Node
 {
 public:
-  KDBClient()
-  : Node("kdb_client")
+  NODE_NAME()
+  : Node("NODE_NAME")
   {
 #####FORLOOP
     client_CLIENT_NAME=this->create_client<CLNT_PKG::srv::SRV_NAME>("client_CLIENT_NAME");
 ######LOOPEND
-    timer_ = this->create_wall_timer(0ms, std::bind(&KDBClient::timer_callback, this));
+    timer_ = this->create_wall_timer(0ms, std::bind(&NODE_NAME::timer_callback, this));
   }
 
 private:
@@ -94,7 +94,7 @@ int main(int argc, char * argv[])
   K r = k(hndl,".ros.clientInit[]",(K)0);
 
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<KDBClient>());
+  rclcpp::spin(std::make_shared<NODE_NAME>());
   rclcpp::shutdown();
   return 0;
 }

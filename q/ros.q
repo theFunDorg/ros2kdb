@@ -56,7 +56,7 @@
   };
 
 .ros.parseSchema:{[msgFile]
-  dat:"\t" vs/: system "cat ../podracer_interfaces/msg/",(string msgFile),".msg";
+  dat:"\t" vs/: system "cat ../racer_interfaces/msg/",(string msgFile),".msg";
   .ros.msgSchemas[msgFile]:flip (`time,`$dat[;1])!(`timestamp,(`$dat[;0] except\: "64"))$\:();
   };
 
