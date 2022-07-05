@@ -5,6 +5,9 @@
 ## ================================================================================================== ##
 . $2;
 
+. $ROS2KDB_DIR/functions.sh config/Subscribers.csv 
+. $ROS2KDB_DIR/functions.sh config/cKDBAccessors.csv
+
 IFS=$'\n'       # make newlines the only separator
 #set -f          # disable globbing
 
@@ -57,7 +60,7 @@ for i in "${SubCodeDict[@]}"; do
         do
             SUBSCRIPTION_NAME=$keyVal
             MSG_FILE=${subNameToMsg[$keyVal]}
-            TOPIC_NAME=${subNameToTopic[$keyVal]}
+            TOPIC_NAME=`echo ${subNameToTopic[$keyVal]}| sed 's~\/~\\\/~g'`
             KDB_PARAM_LIST=${subConversion[$MSG_FILE]}
             HEADER_NAME=`echo ${MSG_FILE}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
 

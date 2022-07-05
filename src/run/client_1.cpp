@@ -68,7 +68,7 @@ private:
   { 
     auto request = std::make_shared<racer_interfaces::srv::EdfState::Request>();
       
-      request->action = S(data)[0];
+      request->action = kS(data)[0];
     // Wait for the result.
     using ServiceResponseFuture =
       rclcpp::Client<racer_interfaces::srv::EdfState>::SharedFuture;

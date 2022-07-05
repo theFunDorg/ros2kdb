@@ -5,6 +5,9 @@
 ## ================================================================================================== ##
 . $2;
 
+. $ROS2KDB_DIR/functions.sh config/Publishers.csv 
+. $ROS2KDB_DIR/functions.sh config/cKDBAccessors.csv
+
 IFS=$'\n'       # make newlines the only separator
 #set -f          # disable globbing
 
@@ -57,25 +60,25 @@ for i in "${PubCodeDict[@]}"; do
         do
             PUBLISHER_NAME=$keyVal
             MSG_FILE=${subNameToMsg[$keyVal]}
-            TOPIC_NAME=${subNameToTopic[$keyVal]}
+            TOPIC_NAME=`echo ${subNameToTopic[$keyVal]}| sed 's~\/~\\\/~g'`
             KDB_PARAM_LIST=${pubConversion[$MSG_FILE]}
             HEADER_NAME=`echo ${MSG_FILE}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
 
             echo -e $i|sed -e "
-            s/PUBLISHER_NAME/$PUBLISHER_NAME/g
-            s/MSG_FILE/$MSG_FILE/g
-            s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
-            s/TOPIC_NAME/$TOPIC_NAME/g
-            s/HEADER_NAME/$HEADER_NAME/g
-            s/NODE_NAME/$NODE_NAME/g
-            s/INDEX/$index/g
             s/MSG_PKG/$MSG_PKG/g
+            s/PUBLISHER_NAME/$PUBLISHER_NAME/g
+            s/INDEX/$index/g
+            s/NODE_NAME/$NODE_NAME/g
+            s/HEADER_NAME/$HEADER_NAME/g
+            s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
+            s/MSG_FILE/$MSG_FILE/g
+            s/TOPIC_NAME/$TOPIC_NAME/g
             "| grep -v "####*"
 
             index=$(( index+1 ));
         done
     else
-    echo -e $i|sed -e "
+    echo -e $i |sed -e "
     s/KDB_HOST/$KDB_HOST/g
     s/PORT/$KDB_PUB_PORT/g
     s/NODE_NAME/$NODE_NAME/g
@@ -83,3 +86,5 @@ for i in "${PubCodeDict[@]}"; do
     "| grep -v "####*"
   fi
 done >./src/run/publish_${1}.cpp
+
+

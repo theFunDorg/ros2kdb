@@ -5,6 +5,9 @@
 ## ================================================================================================== ##
 . $2;
 
+. $ROS2KDB_DIR/functions.sh config/Clients.csv 
+. $ROS2KDB_DIR/functions.sh config/cKDBAccessors.csv
+
 IFS=$'\n'       # make newlines the only separator
 #set -f          # disable globbing
 
@@ -74,7 +77,7 @@ for i in "${ClntCodeDict[@]}"; do
         do
             CLIENT_NAME=$keyVal
             SRV_NAME=${clntNameToSRV[$keyVal]}
-            TOPIC_NAME=${clntNameToService[$keyVal]}
+            TOPIC_NAME=`echo ${clntNameToService[$keyVal]}| sed 's~\/~\\\/~g'`
             KDB_PARAM_LIST=${svcNameToCFunc[$SRV_NAME]}
             HEADER_NAME=`echo ${SRV_NAME}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
             KDB_SRV_NAME=${clntNameToKdbFunc[$keyVal]}

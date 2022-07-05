@@ -1,0 +1,4 @@
+ClientName,clntNameToService,clntNameToSRV,clntNameToKdbFunc
+r_srv_lp,/r_pod/service/lvPosns,LevelPositions,rosLevelPositions
+l_srv_es,/l_pod/service/edfSt,EdfState,rosEdfState
+l_srv_srv,/l_pod/service/serve,Serve,rosServe

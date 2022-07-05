@@ -2,13 +2,8 @@
 
 // make below keyed table with additional msg file name column
 .ros.topicTbl:([topic:`$()]tblName:`$();msgFile:`$());
-.ros.topicTbl[`$"/r_pod/actuate/exhaust"]:(`rightExhaustIn;`ExhaustInput);
-.ros.topicTbl[`$"/l_pod/actuate/exhaust"]:(`leftExhaustIn;`ExhaustInput);
-.ros.topicTbl[`$"/r_pod/actuate/edf"]:(`rightFanIn;`EdfInput);
-.ros.topicTbl[`$"/l_pod/actuate/edf"]:(`leftFanIn;`EdfInput);
-.ros.topicTbl[`$"/r_pod/actuate/elevon"]:(`rightElevonIn;`ElevonInput);
-.ros.topicTbl[`$"/l_pod/actuate/elevon"]:(`leftElevonIn;`ElevonInput);
-.ros.topicTbl[`$"/c_pod/actuate/elevon"]:(`computeElevonIn;`ElevonInput);
+.ros.topicTbl[`$"/r_engine/sensor"]:(`rightEngineSensor;`EngineSensor);
+.ros.topicTbl[`$"/l_engine/actuator"]:(`leftEngineActuate;`EngineActuate);
 
 .ros.msgSchemas:()!();
 
@@ -60,10 +55,21 @@
   .ros.msgSchemas[msgFile]:flip (`time,`$dat[;1])!(`timestamp,(`$dat[;0] except\: "64"))$\:();
   };
 
+.ros.config.publishers:("SSS";enlist csv) 0: `:config/Publishers.csv;
+.ros.config.subscribers:("SSS";enlist csv) 0: `:config/Subscribers.csv;
+.ros.config.servers:("SSSS";enlist csv) 0: `:config/Servers.csv;
+.ros.config.clients:("SSSS";enlist csv) 0: `:config/Clients.csv;
+.ros.config.accessors:("SSSSS";enlist csv) 0: `:config/cKDBAccessors.csv;
+
 / Parse msg file schemas into KDB tables
-.ros.parseSchema each distinct exec msgFile from .ros.topicTbl;
+//.ros.parseSchema each distinct exec msgFile from .ros.topicTbl;
 
 / Assign table schemas to topic tablenames
 {x[`tblName] set .ros.msgSchemas[x`msgFile]}each .ros.topicTbl;
 
-// select count i by date from table where date within 2022.01.01 2010.01.01
+/
+For the publisher/subscribers, make tables with the correct columns and datatypes
+
+For the clients...
+
+Fuck this is the next tricky task

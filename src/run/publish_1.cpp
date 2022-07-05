@@ -8,9 +8,9 @@
 #include "k.h"
 // Adding custom message header files
 
-#include "racer_interfaces/msg/exhaust_input.hpp"
+#include "racer_interfaces/msg/engine_actuate.hpp"
 
-#include "racer_interfaces/msg/edf_input.hpp"
+#include "racer_interfaces/msg/engine_sensor.hpp"
 
 int hndl;
 K response;
@@ -34,35 +34,38 @@ public:
   : Node("KDBPublisher_1"), count_(0)
   {
 
-    publisher_r_act_ex = this->create_publisher<racer_interfaces::msg::ExhaustInput>("/r_pod/actuate/exhaust", 10);
+    publisher_l_eng_actuate = this->create_publisher<racer_interfaces::msg::EngineActuate>("/l_engine/actuator", 10);
 
-    publisher_l_act_edf = this->create_publisher<racer_interfaces::msg::EdfInput>("/l_pod/actuate/edf", 10);
+    publisher_r_eng_sense = this->create_publisher<racer_interfaces::msg::EngineSensor>("/r_engine/sensor", 10);
 
     timer_ = this->create_wall_timer(0ms, std::bind(&KDBPublisher_1::timer_callback, this));
   }
 private:
 
-  void publish_r_act_ex(K data) 
+  void publish_l_eng_actuate(K data) 
   { 
-    auto msg = racer_interfaces::msg::ExhaustInput();
+    auto msg = racer_interfaces::msg::EngineActuate();
     
-    msg.tl_spd=kF(data)[0];
-    msg.tr_spd=kF(data)[1];
-    msg.bl_spd=kF(data)[2];
-    msg.br_spd=kF(data)[3];
-    msg.tl_pos=kF(data)[4];
-    msg.tr_pos=kF(data)[5];
-    msg.bl_pos=kF(data)[6];
-    msg.br_pos=kF(data)[7];
-    publisher_r_act_ex->publish(msg);
+    msg.l_elevon=kI(data)[0];
+    msg.r_elevon=kI(data)[1];
+    msg.v_nozzle=kI(data)[2];
+    msg.h_nozzle=kI(data)[3];
+    msg.int32   edf=(data)[4];
+    publisher_l_eng_actuate->publish(msg);
   }
 
-  void publish_l_act_edf(K data) 
+  void publish_r_eng_sense(K data) 
   { 
-    auto msg = racer_interfaces::msg::EdfInput();
+    auto msg = racer_interfaces::msg::EngineSensor();
     
-    msg.speed=kF(data)[0];
-    publisher_l_act_edf->publish(msg);
+    msg.int32   height=(data)[0];
+    msg.float32 ax=(data)[1];
+    msg.float32 ay=(data)[2];
+    msg.float32 az=(data)[3];
+    msg.float32 gx=(data)[4];
+    msg.float32 gy=(data)[5];
+    msg.float32 gz=(data)[6];
+    publisher_r_eng_sense->publish(msg);
   }
 
   void timer_callback()
@@ -73,11 +76,11 @@ private:
     switch( checkString( topic->s , funcVect ) ) {
 
         case 0 :
-           publish_r_act_ex(data);
+           publish_l_eng_actuate(data);
            break; 
 
         case 1 :
-           publish_l_act_edf(data);
+           publish_r_eng_sense(data);
            break; 
 
        default :
@@ -86,18 +89,18 @@ private:
   }
   rclcpp::TimerBase::SharedPtr timer_;
 
-  rclcpp::Publisher<racer_interfaces::msg::ExhaustInput>::SharedPtr publisher_r_act_ex;
+  rclcpp::Publisher<racer_interfaces::msg::EngineActuate>::SharedPtr publisher_l_eng_actuate;
 
-  rclcpp::Publisher<racer_interfaces::msg::EdfInput>::SharedPtr publisher_l_act_edf;
+  rclcpp::Publisher<racer_interfaces::msg::EngineSensor>::SharedPtr publisher_r_eng_sense;
 
   size_t count_;
 };
 int main(int argc, char * argv[])
 {
 
-  funcVect.push_back ("publish_r_act_ex");
+  funcVect.push_back ("publish_l_eng_actuate");
 
-  funcVect.push_back ("publish_l_act_edf");
+  funcVect.push_back ("publish_r_eng_sense");
 
   hndl = khpu("0.0.0.0", 2345,"myusername:mypassword");
   K r = k(hndl,".ros.pubInit[]",(K)0);

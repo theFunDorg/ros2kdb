@@ -1,0 +1,13 @@
+ROSType,CtoKDBConvertor,KDBToCConvertor,KDBToCAccessor,dataTypeKDB
+bool,kh,kH,h,short
+int8,kh,kH,h,short
+uint8,kh,kH,h,short
+int16,kh,kH,h,short
+uint16,kh,kH,h,short
+int32,ki,kI,i,int
+uint32,ki,kI,i,int
+int64,kj,kJ,j,long
+uint64,kj,kJ,j,long
+float32,kf,kF,f,float
+float64,kf,kF,f,float
+string,ks,kS,s,symbol
