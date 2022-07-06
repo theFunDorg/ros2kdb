@@ -5,8 +5,8 @@
 ## ================================================================================================== ##
 . $2;
 
-. $ROS2KDB_DIR/functions.sh config/Subscribers.csv 
-. $ROS2KDB_DIR/functions.sh config/cKDBAccessors.csv
+. $ROS2KDB_DIR/src/functions.sh config/Subscribers.csv 
+. $ROS2KDB_DIR/src/functions.sh config/cKDBAccessors.csv
 
 IFS=$'\n'       # make newlines the only separator
 #set -f          # disable globbing

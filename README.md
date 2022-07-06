@@ -1,6 +1,6 @@
 # ROS2KDB
-Generic ROS2 API for KDB. 
-Handles:
+Generic ROS2 Package that allows communication with KDB+. 
+Contains builds to:
 * Publish KDB messages
 * Subscribe KDB messages
 * KDB Client requests Service response
@@ -35,28 +35,32 @@ In 4 terminals, run the following:
     q $ROS2KDB_DIR/q/ros.q -p 3456 #Service Server
     q $ROS2KDB_DIR/q/ros.q -p 4567 #Service Client
 
-```Right now... ```
+```TODO: Make below work again... ```
 
 For Publisher/Subscriber
 Open 4 terminals
 Run these commands in each:
-cd ~/cloud/ros_ws/src/ros2kdb
-q q/ros.q -p 1234 #Topic Publisher
-q q/ros.q -p 2345 #Topic Subscriber
-. install/setup.bash;echo done;ros2 run ros2kdb kdbpub
-. install/setup.bash;echo done;ros2 run ros2kdb kdbsub
+
+    cd ~/cloud/ros_ws/src/ros2kdb
+    q q/ros.q -p 1234 #Topic Publisher
+    q q/ros.q -p 2345 #Topic Subscriber
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbpub
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbsub
 
 in the window of port 1234, run the command: 
-.ros.send[`publish_r_act_ex;(),(1 2 3 4 5 6 7 8f)];
+
+    .ros.send[`publish_r_act_ex;(),(1 2 3 4 5 6 7 8f)];
 
 
 For Service Server/Client
 Open 4 terminals
 Run these commands in each 
 
-q q/ros.q -p 3456 #Service Server
-q q/ros.q -p 4567 #Service Client
-. install/setup.bash;echo done;ros2 run ros2kdb kdbsrv
-. install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
+    q q/ros.q -p 3456 #Service Server
+    q q/ros.q -p 4567 #Service Client
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbsrv
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
-.ros.clientRequest[`func_client_serve_kdb;(1i;2i)]
+
+
+```Currently semi-working as working on construction of .cpp files```

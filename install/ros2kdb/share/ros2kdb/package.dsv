@@ -1,5 +1,0 @@
-source;share/ros2kdb/local_setup.bash
-source;share/ros2kdb/local_setup.dsv
-source;share/ros2kdb/local_setup.ps1
-source;share/ros2kdb/local_setup.sh
-source;share/ros2kdb/local_setup.zsh

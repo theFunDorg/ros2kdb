@@ -1,8 +1,0 @@
-[01m[K/mnt/c/Users/SCoug/OneDrive/wsl/ros_ws/src/ros2kdb/src/newSubKdb.cpp:8:10:[m[K [01;31m[Kfatal error: [m[Kros2kdb/msg/ExhaustInput.hpp: No such file or directory
-    8 | #include [01;31m[K"ros2kdb/msg/ExhaustInput.hpp"[m[K
-      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-compilation terminated.
-make[2]: *** [CMakeFiles/kdbsub.dir/build.make:63: CMakeFiles/kdbsub.dir/src/newSubKdb.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:123: CMakeFiles/kdbsub.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:141: all] Error 2
