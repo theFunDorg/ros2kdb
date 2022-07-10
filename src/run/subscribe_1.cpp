@@ -30,14 +30,14 @@ class KDBSubscriber_1 : public rclcpp::Node
 
     void callback_l_eng_actuate(const racer_interfaces::msg::EngineActuate::SharedPtr msg) const
     {
-      K msgRec=knk(5,ki( (msg->l_elevon)),ki( (msg->r_elevon)),ki( (msg->v_nozzle)),ki( (msg->h_nozzle)),( (msg->int32   edf)));
-      k(hndl,"{[x] .ros.receive[\"/l_engine/actuator\";x]}",msgRec,(K)0);
+      K msgRec=knk(5,ki( (msg->l_elevon)),ki( (msg->r_elevon)),ki( (msg->v_nozzle)),ki( (msg->h_nozzle)),ki( (msg->edf)));
+      k(hndl,"{[x] .ros.receive[\"l_eng_actuate\";x]}",msgRec,(K)0);
     }
 
     void callback_r_eng_sense(const racer_interfaces::msg::EngineSensor::SharedPtr msg) const
     {
-      K msgRec=knk(7,( (msg->int32   height)),( (msg->float32 ax)),( (msg->float32 ay)),( (msg->float32 az)),( (msg->float32 gx)),( (msg->float32 gy)),( (msg->float32 gz)));
-      k(hndl,"{[x] .ros.receive[\"/r_engine/sensor\";x]}",msgRec,(K)0);
+      K msgRec=knk(7,ki( (msg->height)),kf( (msg->ax)),kf( (msg->ay)),kf( (msg->az)),kf( (msg->gx)),kf( (msg->gy)),kf( (msg->gz)));
+      k(hndl,"{[x] .ros.receive[\"r_eng_sense\";x]}",msgRec,(K)0);
     }
 
     // Attaching the subscriptions

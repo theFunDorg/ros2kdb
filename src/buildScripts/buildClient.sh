@@ -32,8 +32,8 @@ for i in `ls $ROS2KDB_DIR/../$SRV_PKG/srv/*.srv`; do
         index=0;
         continue;
     fi
-    type=`echo $line |cut -f 1`;
-    name=`echo $line |cut -f 2`;
+    type=`echo $line |sed 's/ /\t/g'|cut -f 1`;
+    name=`echo $line |sed 's/ /\t/g'|cut -f 2`;
     unnumberedType=`echo  $varname | sed 's/[0-9]//g'`
     if [[ $fieldType == "request"* ]];
       then 

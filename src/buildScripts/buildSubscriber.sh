@@ -22,8 +22,8 @@ for i in `ls $ROS2KDB_DIR/../$MSG_PKG/msg/*.msg`; do
   subConversion[$keyName]="$((1+`cat $i|wc -l`))";
   index=0;
   for line in $(cat < "$i"); do
-    type=`echo $line |cut -f 1`;
-    name=`echo $line |cut -f 2`;
+    type=`echo $line |sed 's/[ ]\+/\t/g'|cut -f 1`;
+    name=`echo $line |sed 's/[ ]\+/\t/g'|cut -f 2`;
     unnumberedType=`echo  $varname | sed 's/[0-9]//g'`
     subConversion[$keyName]=${subConversion[$keyName]}","${CtoKDBConvertor[$type]}"("$unnumberedType" (msg->"$name"))";
     index=$(( index+1 ));

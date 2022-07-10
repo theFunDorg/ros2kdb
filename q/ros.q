@@ -1,10 +1,3 @@
-// system "p 1234";
-
-// make below keyed table with additional msg file name column
-.ros.topicTbl:([topic:`$()]tblName:`$();msgFile:`$());
-.ros.topicTbl[`$"/r_engine/sensor"]:(`rightEngineSensor;`EngineSensor);
-.ros.topicTbl[`$"/l_engine/actuator"]:(`leftEngineActuate;`EngineActuate);
-
 .ros.msgSchemas:()!();
 
 .ros.pubInit:{[]
@@ -51,25 +44,22 @@
   };
 
 .ros.parseSchema:{[msgFile]
-  dat:"\t" vs/: system "cat ../racer_interfaces/msg/",(string msgFile),".msg";
-  .ros.msgSchemas[msgFile]:flip (`time,`$dat[;1])!(`timestamp,(`$dat[;0] except\: "64"))$\:();
-  };
+  rawData:system "cat ../racer_interfaces/msg/",(string msgFile),".msg";
+  choppedData:`$" " vs/: ssr[;"\t";" "] each rawData;
+  tblCols:last each choppedData;
+  colTypes:{.ros.config.accessors[x][`dataTypeKDB]$()} each first each choppedData;
+  .ros.msgSchemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
 
+  };
+// Load in CSV configs for ROS2 Package
 .ros.config.publishers:("SSS";enlist csv) 0: `:config/Publishers.csv;
 .ros.config.subscribers:("SSS";enlist csv) 0: `:config/Subscribers.csv;
 .ros.config.servers:("SSSS";enlist csv) 0: `:config/Servers.csv;
 .ros.config.clients:("SSSS";enlist csv) 0: `:config/Clients.csv;
-.ros.config.accessors:("SSSSS";enlist csv) 0: `:config/cKDBAccessors.csv;
+.ros.config.accessors:1!("SSSSS";enlist csv) 0: `:config/cKDBAccessors.csv;
 
 / Parse msg file schemas into KDB tables
-//.ros.parseSchema each distinct exec msgFile from .ros.topicTbl;
+.ros.parseSchema each distinct .ros.config.publishers[`subNameToMsg];
 
 / Assign table schemas to topic tablenames
-{x[`tblName] set .ros.msgSchemas[x`msgFile]}each .ros.topicTbl;
-
-/
-For the publisher/subscribers, make tables with the correct columns and datatypes
-
-For the clients...
-
-Fuck this is the next tricky task
+{x[`PublisherName] set .ros.msgSchemas[x`subNameToMsg]}each .ros.config.publishers;

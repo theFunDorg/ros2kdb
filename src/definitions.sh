@@ -14,6 +14,8 @@ KDB_UNAME_PWD="myusername:mypassword"
 MSG_PKG="racer_interfaces";
 SRV_PKG="racer_interfaces";
 
+
+## TODO:: Finalise below variables:
 # TYPE  LA     VC    AA
 #short  kH()   kh()  ->h
 #int    kI()   ki()  ->i

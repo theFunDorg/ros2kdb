@@ -29,7 +29,7 @@ class NODE_NAME : public rclcpp::Node
     void callback_SUBSCRIPTION_NAME(const MSG_PKG::msg::MSG_FILE::SharedPtr msg) const
     {
       K msgRec=knk(KDB_PARAM_LIST);
-      k(hndl,"{[x] .ros.receive[\"TOPIC_NAME\";x]}",msgRec,(K)0);
+      k(hndl,"{[x] .ros.receive[\"SUBSCRIPTION_NAME\";x]}",msgRec,(K)0);
     }
 #####LOOPEND
 
