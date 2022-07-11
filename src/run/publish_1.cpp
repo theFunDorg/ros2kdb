@@ -9,7 +9,6 @@
 // Adding custom message header files
 
 #include "racer_interfaces/msg/engine_actuate.hpp"
-
 #include "racer_interfaces/msg/engine_sensor.hpp"
 
 int hndl;
@@ -18,6 +17,7 @@ K data;
 K topic;
 std::vector<std::string> funcVect;
 int checkString (std::string inp, std::vector<std::string> vct)
+
 {
   for(unsigned int i = 0; i < vct.size(); i++) {
       if(vct[i]==inp){
@@ -35,9 +35,7 @@ public:
   {
 
     publisher_l_eng_actuate = this->create_publisher<racer_interfaces::msg::EngineActuate>("/l_engine/actuator", 10);
-
     publisher_r_eng_sense = this->create_publisher<racer_interfaces::msg::EngineSensor>("/r_engine/sensor", 10);
-
     timer_ = this->create_wall_timer(0ms, std::bind(&KDBPublisher_1::timer_callback, this));
   }
 private:
@@ -74,15 +72,12 @@ private:
     topic=kK(response)[0];
     data=kK(response)[1]; 
     switch( checkString( topic->s , funcVect ) ) {
-
         case 0 :
            publish_l_eng_actuate(data);
            break; 
-
         case 1 :
            publish_r_eng_sense(data);
            break; 
-
        default :
            RCLCPP_INFO(this->get_logger(), "string out of range");
     }
@@ -99,9 +94,7 @@ int main(int argc, char * argv[])
 {
 
   funcVect.push_back ("publish_l_eng_actuate");
-
   funcVect.push_back ("publish_r_eng_sense");
-
   hndl = khpu("0.0.0.0", 2345,"myusername:mypassword");
   K r = k(hndl,".ros.pubInit[]",(K)0);
   rclcpp::init(argc, argv);

@@ -40,14 +40,14 @@ check the table l_eng_actuate in the Subscriber KDB+ process and see the data ha
 
 Open 4 terminals and run one of the following in each. Start the KDB processes first:
 
-    cd $ROS2KDB_DIR; q q/ros.q -p 3456 -ROSnode server#Service Server
-    cd $ROS2KDB_DIR; q q/ros.q -p 4567 -ROSnode client#Service Client
+    cd $ROS2KDB_DIR; q q/ros.q -p 3456 -ROSnode server  #Service Server
+    cd $ROS2KDB_DIR; q q/ros.q -p 4567 -ROSnode client  #Service Client
     . install/setup.bash;echo done;ros2 run ros2kdb kdbsvr
     . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
 In the window of the Client q process, run the command: 
 
-    .ros.clientRequest[`$"func_client_r_srv_lp";(1f;2i)]
+    .ros.clientRequest[`l_srv_srv;4 5j]
 
 ```TODO::```
   * Add loop to connection handle to wait until connection created

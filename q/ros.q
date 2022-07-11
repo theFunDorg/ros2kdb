@@ -29,7 +29,7 @@
   };
 
 // Dummy function for client/server check
-.ros.funcOne:{[x;y]
+.ros.Serve:{[x;y]
   show x;
   show y;
   :x%y

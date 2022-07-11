@@ -39,7 +39,7 @@ public:
   : Node("NODE_NAME")
   {
 #####FORLOOP
-    client_CLIENT_NAME=this->create_client<CLNT_PKG::srv::SRV_NAME>("client_CLIENT_NAME");
+    client_CLIENT_NAME=this->create_client<CLNT_PKG::srv::SRV_NAME>("CLIENT_NAME");
 ######LOOPEND
     timer_ = this->create_wall_timer(0ms, std::bind(&NODE_NAME::timer_callback, this));
   }
@@ -65,7 +65,7 @@ private:
 
   void timer_callback()
   {
-    response= k((-hndl), (S) 0); 
+    response= k((hndl), (S) 0); 
     topic=kK(response)[0];
     data=kK(response)[1]; 
     switch( checkString( topic->s , funcVect ) ) {
@@ -87,7 +87,7 @@ private:
 int main(int argc, char * argv[])
 {
 #####FORLOOP
-  funcVect.push_back ("func_client_CLIENT_NAME");
+  funcVect.push_back ("CLIENT_NAME");
 ######LOOPEND
 
   hndl = khpu("KDB_HOST", PORT,"KDB_UNAME_PWD");

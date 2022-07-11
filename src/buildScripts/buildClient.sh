@@ -73,11 +73,10 @@ for i in "${ClntCodeDict[@]}"; do
   if [[ $i == *"#####FORLOOP"* ]];
     then 
         index=0
-        for keyVal in "${!clntNameToService[@]}";
+        for keyVal in "${!clntNameToSRV[@]}";
         do
             CLIENT_NAME=$keyVal
             SRV_NAME=${clntNameToSRV[$keyVal]}
-            TOPIC_NAME=`echo ${clntNameToService[$keyVal]}| sed 's~\/~\\\/~g'`
             KDB_PARAM_LIST=${svcNameToCFunc[$SRV_NAME]}
             HEADER_NAME=`echo ${SRV_NAME}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
             KDB_SRV_NAME=${clntNameToKdbFunc[$keyVal]}
@@ -88,7 +87,6 @@ for i in "${ClntCodeDict[@]}"; do
             s/CLIENT_NAME/$CLIENT_NAME/g
             s/SRV_NAME/$SRV_NAME/g
             s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
-            s/TOPIC_NAME/$TOPIC_NAME/g
             s/HEADER_NAME/$HEADER_NAME/g
             s/INDEX/$index/g
             s/CLNT_PKG/$SRV_PKG/g

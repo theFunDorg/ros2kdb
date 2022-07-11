@@ -73,11 +73,10 @@ for i in "${SrvCodeDict[@]}"; do
   if [[ $i == *"#####FORLOOP"* ]];
     then 
         index=0
-        for keyVal in "${!svcNameToService[@]}";
+        for keyVal in "${!svcNameToSRV[@]}";
         do
             SERVER_NAME=$keyVal
             SRV_FILE=${svcNameToSRV[$keyVal]}
-            TOPIC_NAME=`echo ${svcNameToService[$keyVal]}| sed 's~\/~\\\/~g'`
             KDB_PARAM_LIST=${svcNameToCFunc[$MSG_FILE]}
             HEADER_NAME=`echo ${SRV_FILE}| sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'`
             KDB_FUNC_NAME=${svcNameToKdbFunc[$keyVal]}
@@ -88,7 +87,6 @@ for i in "${SrvCodeDict[@]}"; do
             s/SERVER_NAME/$SERVER_NAME/g
             s/SRV_FILE/$SRV_FILE/g
             s/KDB_PARAM_LIST/$KDB_PARAM_LIST/g
-            s/TOPIC_NAME/$TOPIC_NAME/g
             s/HEADER_NAME/$HEADER_NAME/g
             s/INDEX/$index/g
             s/SRV_PKG/$SRV_PKG/g

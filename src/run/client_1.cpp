@@ -35,11 +35,11 @@ public:
   : Node("KDBClient_1")
   {
 
-    client_l_srv_srv=this->create_client<racer_interfaces::srv::Serve>("client_l_srv_srv");
+    client_l_srv_srv=this->create_client<racer_interfaces::srv::Serve>("l_srv_srv");
 
-    client_r_srv_lp=this->create_client<racer_interfaces::srv::LevelPositions>("client_r_srv_lp");
+    client_r_srv_lp=this->create_client<racer_interfaces::srv::LevelPositions>("r_srv_lp");
 
-    timer_ = this->create_wall_timer(0ms, std::bind(&KDBClient_1::timer_callback, this));
+    timer_ = this->create_wall_timer(10ms, std::bind(&KDBClient_1::timer_callback, this));
   }
 private:
 
@@ -78,7 +78,7 @@ private:
 
   void timer_callback()
   {
-    response= k((-hndl), (S) 0); 
+    response= k((hndl), (S) 0); 
     topic=kK(response)[0];
     data=kK(response)[1]; 
     switch( checkString( topic->s , funcVect ) ) {
@@ -105,9 +105,9 @@ private:
 int main(int argc, char * argv[])
 {
 
-  funcVect.push_back ("func_client_l_srv_srv");
+  funcVect.push_back ("l_srv_srv");
 
-  funcVect.push_back ("func_client_r_srv_lp");
+  funcVect.push_back ("r_srv_lp");
 
   hndl = khpu("0.0.0.0", 4567,"myusername:mypassword");
   K r = k(hndl,".ros.clientInit[]",(K)0);

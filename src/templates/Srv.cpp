@@ -26,7 +26,7 @@ class NODE_NAME : public rclcpp::Node
      :Node("NODE_NAME")
      {
 #####FORLOOP
-         server_SERVER_NAME = this->create_service<SRV_PKG::srv::SRV_FILE>("kdbFunc", std::bind(&NODE_NAME::func_SERVER_NAME, this, _1, _2));
+         server_SERVER_NAME = this->create_service<SRV_PKG::srv::SRV_FILE>("SERVER_NAME", std::bind(&NODE_NAME::func_SERVER_NAME, this, _1, _2));
 #####LOOPEND
      }
  

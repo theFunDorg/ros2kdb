@@ -1,3 +1,3 @@
-ClientName,clntNameToService,clntNameToSRV,clntNameToKdbFunc
-r_srv_lp,/r_engine/service/lvPosns,LevelPositions,rosLevelPositions
-l_srv_srv,/l_engine/service/serve,Serve,rosServe
+ClientName,clntNameToSRV,clntNameToKdbFunc
+r_srv_lp,LevelPositions,rosLevelPositions
+l_srv_srv,Serve,rosServe
