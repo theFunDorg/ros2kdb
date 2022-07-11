@@ -1,4 +1,3 @@
 ServerName,svcNameToService,svcNameToSRV,svcNameToKdbFunc
-r_srv_lp,/r_pod/service/lvPosns,LevelPositions,.ros.levelPositions
-l_srv_es,/l_pod/service/edfSt,EdfState,.ros.edfState
-l_srv_srv,/l_pod/service/serve,Serve,.ros.Serve
+r_srv_lp,/r_engine/service/lvPosns,LevelPositions,.ros.levelPositions
+l_srv_srv,/l_engine/service/serve,Serve,.ros.Serve

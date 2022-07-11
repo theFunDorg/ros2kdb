@@ -22,8 +22,8 @@ for i in `ls $ROS2KDB_DIR/../$MSG_PKG/msg/*.msg`; do
   pubConversion[$keyName]="";
   index=0;
   for line in $(cat < "$i"); do
-    type=`echo $line |sed 's/ /\t/g'|cut -f 1`;
-    name=`echo $line |sed 's/ /\t/g'|cut -f 2`;
+    type=`echo $line |sed 's/[ ]\+/\t/g'|cut -f 1`;
+    name=`echo $line |sed 's/[ ]\+/\t/g'|cut -f 2`;
     unnumberedType=`echo  $varname | sed 's/[0-9]//g'`
     pubConversion[$keyName]=${pubConversion[$keyName]}"\n    msg."$name"="${KDBToCConvertor[$type]}"(data)["$index"];";
     index=$(( index+1 ));

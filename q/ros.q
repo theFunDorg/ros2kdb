@@ -1,5 +1,4 @@
-.ros.msgSchemas:()!();
-
+// Init functions
 .ros.pubInit:{[]
   .ros.pubHndl:neg .z.w;
   show `$"ROS2 Publisher is initialised";
@@ -20,20 +19,23 @@
   show `$"ROS2 Client is initialised";
   };
 
+// ROS2 Pub/Sub message functions
 .ros.send:{[topic;data]
   .ros.pubHndl(topic;(),data);
   };
 
 .ros.receive:{[topic;data]
-  .ros.topicTbl[`$topic][`tblName] upsert .z.P,data
+  (`$topic) upsert .z.P,data
   };
 
+// Dummy function for client/server check
 .ros.funcOne:{[x;y]
   show x;
   show y;
   :x%y
   };
 
+// ROS2 Client/Server functions
 .ros.clientRequest:{[service;request]
   .ros.clntHndl(service;request)
   };
@@ -43,23 +45,64 @@
   show response
   };
 
-.ros.parseSchema:{[msgFile]
+// Schema parser to parse messages into tables
+.ros.parseTopicSchema:{[msgFile]
   rawData:system "cat ../racer_interfaces/msg/",(string msgFile),".msg";
   choppedData:`$" " vs/: ssr[;"\t";" "] each rawData;
   tblCols:last each choppedData;
   colTypes:{.ros.config.accessors[x][`dataTypeKDB]$()} each first each choppedData;
-  .ros.msgSchemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
-
+  .ros.schemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
   };
+
+// Schema parser to parse messages into tables
+.ros.parseServiceSchema:{[msgFile]
+  rawData:system "cat ../racer_interfaces/srv/",(string msgFile),".srv";
+  rawData:rawData where not rawData~\:"---";
+  choppedData:`$" " vs/: ssr[;"\t";" "] each rawData;
+  tblCols:last each choppedData;
+  colTypes:{.ros.config.accessors[x][`dataTypeKDB]$()} each first each choppedData;
+  .ros.schemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
+  };
+
+
+// Parse and set node's schemas
+.ros.setTables:{[nodeType]
+    $[nodeType~`server;
+      [
+        .ros.config.servers:("SSSS";enlist csv) 0: `:config/Servers.csv;
+        .ros.parseServiceSchema each distinct .ros.config.servers[`svcNameToSRV];
+        {x[`ServerName] set .ros.schemas[x`svcNameToSRV]}each .ros.config.servers;
+      ];
+    nodeType~`client;
+      [
+        .ros.config.clients:("SSSS";enlist csv) 0: `:config/Clients.csv;
+        .ros.parseServiceSchema each distinct .ros.config.clients[`clntNameToSRV];
+        {x[`ClientName] set .ros.schemas[x`clntNameToSRV]}each .ros.config.clients;
+
+      ];
+    nodeType~`publisher;
+      [
+        .ros.config.publishers:("SSS";enlist csv) 0: `:config/Publishers.csv;
+        .ros.parseTopicSchema each distinct .ros.config.publishers[`subNameToMsg];
+        {x[`PublisherName] set .ros.schemas[x`subNameToMsg]}each .ros.config.publishers;
+
+      ];
+    nodeType~`subscriber;
+      [
+        .ros.config.subscribers:("SSS";enlist csv) 0: `:config/Subscribers.csv;
+        .ros.parseTopicSchema each distinct .ros.config.subscribers[`subNameToMsg];
+        {x[`SubscriberName] set .ros.schemas[x`subNameToMsg]}each .ros.config.subscribers;
+      ]
+    ];
+  };
+// Initialise schema dictionary
+.ros.schemas:()!();
+
 // Load in CSV configs for ROS2 Package
-.ros.config.publishers:("SSS";enlist csv) 0: `:config/Publishers.csv;
-.ros.config.subscribers:("SSS";enlist csv) 0: `:config/Subscribers.csv;
-.ros.config.servers:("SSSS";enlist csv) 0: `:config/Servers.csv;
-.ros.config.clients:("SSSS";enlist csv) 0: `:config/Clients.csv;
 .ros.config.accessors:1!("SSSSS";enlist csv) 0: `:config/cKDBAccessors.csv;
 
-/ Parse msg file schemas into KDB tables
-.ros.parseSchema each distinct .ros.config.publishers[`subNameToMsg];
+// Reading node type
+.ros.nodeType:first `$.Q.opt[.z.X][`ROSnode];
 
-/ Assign table schemas to topic tablenames
-{x[`PublisherName] set .ros.msgSchemas[x`subNameToMsg]}each .ros.config.publishers;
+// Initialising node
+.ros.setTables[.ros.nodeType];

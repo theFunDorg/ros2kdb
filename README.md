@@ -8,7 +8,7 @@ Contains builds to:
 
 ## Installation Instructions
 
-Set the Package's working directory
+Set the Package's directory as ROS2KDB_DIR. 
 
     export ROS2KDB_DIR=~/cloud/ros_ws/src/ros2kdb
 
@@ -19,48 +19,38 @@ Use the below commands to create the C++ scripts
     bash ./src/buildScripts/buildClient.sh 1     $ROS2KDB_DIR/src/definitions.sh;
     bash ./src/buildScripts/buildServer.sh 1     $ROS2KDB_DIR/src/definitions.sh;
 
-## Instructions
-To run the ROS2 instances, in 4 terminals Run:
+## Running Publisher/Subscriber Nodes
 
-    cd $ROS2KDB_DIR/../../
+Open 4 terminals and run one of the following in each. Start the KDB processes first:
+
+    cd $ROS2KDB_DIR;q q/ros.q -p 1234 -ROSnode publisher #Topic Publisher
+    cd $ROS2KDB_DIR;q q/ros.q -p 2345 -ROSnode subscriber #Topic Subscriber
     . install/setup.bash;echo done;ros2 run ros2kdb kdbpub
     . install/setup.bash;echo done;ros2 run ros2kdb kdbsub
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbsrv
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
-In 4 terminals, run the following:
+In the window of the Publisher q process, run the command: 
 
-    q $ROS2KDB_DIR/q/ros.q -p 1234 #Topic Publisher
-    q $ROS2KDB_DIR/q/ros.q -p 2345 #Topic Subscriber
-    q $ROS2KDB_DIR/q/ros.q -p 3456 #Service Server
-    q $ROS2KDB_DIR/q/ros.q -p 4567 #Service Client
+    .ros.send[`$"publish_l_eng_actuate";1 2 3 4 5i];
+
+check the table l_eng_actuate in the Subscriber KDB+ process and see the data has been added to the table.
+
+## Running Service Server/Client Nodes
 
 ```TODO: Make below work again... ```
 
-For Publisher/Subscriber
-Open 4 terminals
-Run these commands in each:
+Open 4 terminals and run one of the following in each. Start the KDB processes first:
 
-    cd ~/cloud/ros_ws/src/ros2kdb
-    q q/ros.q -p 1234 #Topic Publisher
-    q q/ros.q -p 2345 #Topic Subscriber
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbpub
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbsub
-
-in the window of port 1234, run the command: 
-
-    .ros.send[`publish_r_act_ex;(),(1 2 3 4 5 6 7 8f)];
-
-
-For Service Server/Client
-Open 4 terminals
-Run these commands in each 
-
-    q q/ros.q -p 3456 #Service Server
-    q q/ros.q -p 4567 #Service Client
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbsrv
+    cd $ROS2KDB_DIR; q q/ros.q -p 3456 -ROSnode server#Service Server
+    cd $ROS2KDB_DIR; q q/ros.q -p 4567 -ROSnode client#Service Client
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbsvr
     . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
+In the window of the Client q process, run the command: 
 
+    .ros.clientRequest[`$"func_client_r_srv_lp";(1f;2i)]
 
-```Currently semi-working as working on construction of .cpp files```
+```TODO::```
+  * Add loop to connection handle to wait until connection created
+  * Add handle drop logic to C++ scripts
+  * Add error control to all functions to handle incorrect values
+  * Add column of message/service package name to pub/sub/clnt/svc CSVs to remove from definitions.sh
