@@ -37,15 +37,18 @@
 
 // ROS2 Client/Server functions
 .ros.clientRequest:{[service;request]
-  .ros.clntHndl(service;request)
+  .ros.clntHndl(service;request);
+  (`$string[service],"_request") upsert .z.P,request;
+  .ros.clntHndl[];
   };
 
 .ros.clientResponse:{[service;response]
+  (`$string[service],"_response") upsert .z.P,response;
   show service;
   show response
   };
 
-// Schema parser to parse messages into tables
+// Schema parser to parse Topic messages into tables
 .ros.parseTopicSchema:{[msgFile]
   rawData:system "cat ../racer_interfaces/msg/",(string msgFile),".msg";
   choppedData:`$" " vs/: ssr[;"\t";" "] each rawData;
@@ -54,7 +57,7 @@
   .ros.schemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
   };
 
-// Schema parser to parse messages into tables
+// Schema parser to parse Service messages into tables
 .ros.parseServiceSchema:{[msgFile]
   rawData:system "cat ../racer_interfaces/srv/",(string msgFile),".srv";
   rawData:rawData where not rawData~\:"---";
@@ -63,7 +66,10 @@
   colTypes:{.ros.config.accessors[x][`dataTypeKDB]$()} each first each choppedData;
   .ros.schemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
   };
-
+  // ltrim,rtrim each rawData
+  //splitRow:first where rawData~\:"---"
+  //request:rawData til splitRow
+  //response:rawData (til count rawData) except 0,1+til splitRow
 
 // Parse and set node's schemas
 .ros.setTables:{[nodeType]
@@ -95,6 +101,7 @@
       ]
     ];
   };
+
 // Initialise schema dictionary
 .ros.schemas:()!();
 

@@ -36,7 +36,6 @@ check the table l_eng_actuate in the Subscriber KDB+ process and see the data ha
 
 ## Running Service Server/Client Nodes
 
-```TODO: Make below work again... ```
 
 Open 4 terminals and run one of the following in each. Start the KDB processes first:
 
