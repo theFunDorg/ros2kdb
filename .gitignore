@@ -35,9 +35,9 @@
 .vscode
 
 # ROS2 Directories
-./install/*
-./build/*
-./log/*
+./install
+./build
+./log
 
 # Package-specific directories
-./src/run/*
+./src/run
