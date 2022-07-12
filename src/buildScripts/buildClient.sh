@@ -39,7 +39,7 @@ for i in `ls $ROS2KDB_DIR/../$SRV_PKG/srv/*.srv`; do
       then 
       clientRequest[$keyName]=${clientRequest[$keyName]}"\n      request->"$name" = "${KDBToCConvertor[$type]}"(data)["${index}"];";
       else
-      clientResponse[$keyName]=${clientResponse[$keyName]}", "${CtoKDBConvertor[$type]}"("$unnumberedType"((future.get())->"$name")";
+      clientResponse[$keyName]=${clientResponse[$keyName]}", "${CtoKDBConvertor[$type]}"("$unnumberedType"((result.get())->"$name")";
     fi
 
     index=$(( index+1 ));

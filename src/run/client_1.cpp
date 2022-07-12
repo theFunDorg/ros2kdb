@@ -38,8 +38,8 @@ using namespace std::chrono_literals;
     auto result = client->async_send_request(request);
     rclcpp::spin_until_future_complete(node, result);
     // Wait for the result.
-    K resp=knk(1, kf(((future.get())->output_c)));
-    k(hndl,"{.ros.clientResponse[`KDB_Serve;x]}",resp,(K)0);
+    K resp=knk(1, kf(((result.get())->output_c)));
+    k(hndl,"{.ros.clientResponse[`l_srv_srv;x]}",resp,(K)0);
   }
 
   void func_client_r_srv_lp(K data, auto client, auto node) 
@@ -50,8 +50,8 @@ using namespace std::chrono_literals;
     auto result = client->async_send_request(request);
     rclcpp::spin_until_future_complete(node, result);
     // Wait for the result.
-    K resp=knk(1, kh(((future.get())->successs)));
-    k(hndl,"{.ros.clientResponse[`KDB_LevelPositions;x]}",resp,(K)0);
+    K resp=knk(1, kh(((result.get())->successs)));
+    k(hndl,"{.ros.clientResponse[`r_srv_lp;x]}",resp,(K)0);
   }
 
 int main(int argc, char **argv)
@@ -62,16 +62,16 @@ int main(int argc, char **argv)
 
   funcVect.push_back ("r_srv_lp");
 
-  hndl = khpu("0.0.0.0", 4567,"myusername:mypassword");
+  hndl = - khpu("0.0.0.0", 4567,"myusername:mypassword");
   K r = k(hndl,".ros.clientInit[]",(K)0);
   rclcpp::init(argc, argv);
   std::shared_ptr<rclcpp::Node> KDBClient_1 = rclcpp::Node::make_shared("KDBClient_1");
 
   rclcpp::Client<racer_interfaces::srv::Serve>::SharedPtr client_l_srv_srv;  
-    client_l_srv_srv=this->create_client<racer_interfaces::srv::Serve>("l_srv_srv");
+    client_l_srv_srv=KDBClient_1->create_client<racer_interfaces::srv::Serve>("l_srv_srv");
 
   rclcpp::Client<racer_interfaces::srv::LevelPositions>::SharedPtr client_r_srv_lp;  
-    client_r_srv_lp=this->create_client<racer_interfaces::srv::LevelPositions>("r_srv_lp");
+    client_r_srv_lp=KDBClient_1->create_client<racer_interfaces::srv::LevelPositions>("r_srv_lp");
 
   // Loop to take in KDB+ data
   while (true) {

@@ -6,6 +6,8 @@ Contains builds to:
 * KDB Client requests Service response
 * KDB Server responds to Service request
 
+Currently, the code is written for a package called racer_interfaces located in the same src directory as the ros2kdb package
+
 ## Installation Instructions
 
 Set the Package's directory as ROS2KDB_DIR. 
@@ -41,8 +43,8 @@ Open 4 terminals and run one of the following in each. Start the KDB processes f
 
     cd $ROS2KDB_DIR; q q/ros.q -p 3456 -ROSnode server  #Service Server
     cd $ROS2KDB_DIR; q q/ros.q -p 4567 -ROSnode client  #Service Client
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbsvr
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
+    cd $ROS2KDB_DIR/../..; . install/setup.bash;echo done;ros2 run ros2kdb kdbsvr
+    cd $ROS2KDB_DIR/../..; . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
 In the window of the Client q process, run the command: 
 

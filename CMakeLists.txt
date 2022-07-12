@@ -28,8 +28,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -march=native")
 #ament_target_dependencies(kdbsvr rclcpp racer_interfaces)
 #target_include_directories(kdbsvr   PRIVATE  "./include")
 
-#add_executable(kdbclnt   src/run/client_1.cpp	include/c.o)
-add_executable(kdbclnt   src/testFiles/clientTest.cpp	include/c.o)
+add_executable(kdbclnt   src/run/client_1.cpp	include/c.o)
 ament_target_dependencies(kdbclnt rclcpp racer_interfaces)
 target_include_directories(kdbclnt  PRIVATE  "./include")
 

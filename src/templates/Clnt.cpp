@@ -39,7 +39,7 @@ using namespace std::chrono_literals;
     rclcpp::spin_until_future_complete(node, result);
     // Wait for the result.
     K resp=knk(KDB_CLIENT_RESPONSE_CONVERTOR);
-    k(hndl,"{.ros.clientResponse[`KDB_SRV_NAME;x]}",resp,(K)0);
+    k(hndl,"{.ros.clientResponse[`CLIENT_NAME;x]}",resp,(K)0);
   }
 ######LOOPEND
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
   funcVect.push_back ("CLIENT_NAME");
 ######LOOPEND
 
-  hndl = khpu("KDB_HOST", PORT,"KDB_UNAME_PWD");
+  hndl = - khpu("KDB_HOST", PORT,"KDB_UNAME_PWD");
   K r = k(hndl,".ros.clientInit[]",(K)0);
 
   rclcpp::init(argc, argv);
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
   std::shared_ptr<rclcpp::Node> NODE_NAME = rclcpp::Node::make_shared("NODE_NAME");
 #####FORLOOP
   rclcpp::Client<CLNT_PKG::srv::SRV_NAME>::SharedPtr client_CLIENT_NAME;  
-    client_CLIENT_NAME=this->create_client<CLNT_PKG::srv::SRV_NAME>("CLIENT_NAME");
+    client_CLIENT_NAME=NODE_NAME->create_client<CLNT_PKG::srv::SRV_NAME>("CLIENT_NAME");
 ######LOOPEND
 
   // Loop to take in KDB+ data
