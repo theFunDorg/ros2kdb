@@ -38,38 +38,42 @@
 // ROS2 Client/Server functions
 .ros.clientRequest:{[service;request]
   .ros.clntHndl(service;request);
-  (`$string[service],"_request") upsert .z.P,request;
+  .ros.makeReq[service] upsert .z.P,request;
   .ros.clntHndl[];
   };
 
 .ros.clientResponse:{[service;response]
-  (`$string[service],"_response") upsert .z.P,response;
+  .ros.makeRes[service] upsert .z.P,response;
   show service;
   show response
   };
 
+// Change symbol name to req/resp
+.ros.makeReq:{`$string[x],"_request"};
+.ros.makeRes:{`$string[x],"_response"};
+
 // Schema parser to parse Topic messages into tables
 .ros.parseTopicSchema:{[msgFile]
   rawData:system "cat ../racer_interfaces/msg/",(string msgFile),".msg";
-  choppedData:`$" " vs/: ssr[;"\t";" "] each rawData;
-  tblCols:last each choppedData;
-  colTypes:{.ros.config.accessors[x][`dataTypeKDB]$()} each first each choppedData;
-  .ros.schemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
+  .ros.createSchema[msgFile;rawData];
   };
 
 // Schema parser to parse Service messages into tables
 .ros.parseServiceSchema:{[msgFile]
   rawData:system "cat ../racer_interfaces/srv/",(string msgFile),".srv";
-  rawData:rawData where not rawData~\:"---";
-  choppedData:`$" " vs/: ssr[;"\t";" "] each rawData;
+  splitRow:first where trim[rawData]~\:"---";
+  request:rawData til splitRow;
+  response:rawData (til count rawData) except 0,1+til splitRow;
+  .ros.createSchema[.ros.makeReq[msgFile];request];
+  .ros.createSchema[.ros.makeRes[msgFile];response];
+  };
+
+.ros.createSchema:{[schemaName;schemaFields]
+  choppedData:`$" " vs/: ssr[;"\t";" "] each schemaFields;
   tblCols:last each choppedData;
   colTypes:{.ros.config.accessors[x][`dataTypeKDB]$()} each first each choppedData;
-  .ros.schemas[msgFile]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
+  .ros.schemas[schemaName]:`timestamp xcols update timestamp:`timestamp$() from flip (tblCols)!(colTypes);
   };
-  // ltrim,rtrim each rawData
-  //splitRow:first where rawData~\:"---"
-  //request:rawData til splitRow
-  //response:rawData (til count rawData) except 0,1+til splitRow
 
 // Parse and set node's schemas
 .ros.setTables:{[nodeType]
@@ -77,14 +81,16 @@
       [
         .ros.config.servers:("SSSS";enlist csv) 0: `:config/Servers.csv;
         .ros.parseServiceSchema each distinct .ros.config.servers[`svcNameToSRV];
-        {x[`ServerName] set .ros.schemas[x`svcNameToSRV]}each .ros.config.servers;
+        {.ros.makeReq[x[`ServerName]] set .ros.schemas[.ros.makeReq[x`svcNameToSRV]]}each .ros.config.servers;
+        {.ros.makeRes[x[`ServerName]] set .ros.schemas[.ros.makeRes[x`svcNameToSRV]]}each .ros.config.servers
       ];
     nodeType~`client;
       [
         .ros.config.clients:("SSSS";enlist csv) 0: `:config/Clients.csv;
         .ros.parseServiceSchema each distinct .ros.config.clients[`clntNameToSRV];
         {x[`ClientName] set .ros.schemas[x`clntNameToSRV]}each .ros.config.clients;
-
+        {.ros.makeReq[x[`ClientName]] set .ros.schemas[.ros.makeReq[x`clntNameToSRV]]}each .ros.config.clients;
+        {.ros.makeRes[x[`ClientName]] set .ros.schemas[.ros.makeRes[x`clntNameToSRV]]}each .ros.config.clients
       ];
     nodeType~`publisher;
       [
@@ -113,3 +119,6 @@
 
 // Initialising node
 .ros.setTables[.ros.nodeType];
+
+//table Counter
+tbls:{([tbl:tables[]]cnt:count each get each tables[])};
