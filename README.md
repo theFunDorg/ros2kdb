@@ -12,7 +12,13 @@ Currently, the code is written for a package called racer_interfaces located in 
 
 Set the Package's directory as ROS2KDB_DIR. 
 
-    export ROS2KDB_DIR=~/cloud/ros_ws/src/ros2kdb
+    export ROS2KDB_DIR=~/cloud/ros_ws/src/ros2kdb/
+
+Set the Package's other directories. These are mostly used by the q qackage
+
+    export CONFIG_DIR=~/cloud/ros_ws/src/ros2kdb/config/
+    export INTERFACES_DIR=~/cloud/ros_ws/src/racer_interfaces/
+    export QROS_DIR=~/cloud/ros_ws/src/ros2kdb/q
 
 Use the below commands to create the C++ scripts
 
@@ -25,10 +31,10 @@ Use the below commands to create the C++ scripts
 
 Open 4 terminals and run one of the following in each. Start the KDB processes first:
 
-    cd $ROS2KDB_DIR;q q/ros.q -p 1234 -ROSnode publisher #Topic Publisher
-    cd $ROS2KDB_DIR;q q/ros.q -p 2345 -ROSnode subscriber #Topic Subscriber
-    . install/setup.bash;echo done;ros2 run ros2kdb kdbpub
+    cd $ROS2KDB_DIR;q q/rosSub.q -p 1234 #Topic Subscriber
+    cd $ROS2KDB_DIR;q q/rosPub.q -p 2345 #Topic Publisher
     . install/setup.bash;echo done;ros2 run ros2kdb kdbsub
+    . install/setup.bash;echo done;ros2 run ros2kdb kdbpub
 
 In the window of the Publisher q process, run the command: 
 
@@ -41,8 +47,8 @@ check the table l_eng_actuate in the Subscriber KDB+ process and see the data ha
 
 Open 4 terminals and run one of the following in each. Start the KDB processes first:
 
-    cd $ROS2KDB_DIR; q q/ros.q -p 3456 -ROSnode server  #Service Server
-    cd $ROS2KDB_DIR; q q/ros.q -p 4567 -ROSnode client  #Service Client
+    cd $ROS2KDB_DIR; q q/rosSvcSrv.q -p 3456 #Service Server
+    cd $ROS2KDB_DIR; q q/rosSvcClnt.q -p 4567 #Service Client
     cd $ROS2KDB_DIR/../..; . install/setup.bash;echo done;ros2 run ros2kdb kdbsvr
     cd $ROS2KDB_DIR/../..; . install/setup.bash;echo done;ros2 run ros2kdb kdbclnt
 
