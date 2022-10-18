@@ -30,6 +30,9 @@ tbls:{([tbl:tables[]]cnt:count each get each tables[])};
   };
 
 //================================================= RUN =================================================//
+if[not `lg in key`;
+    .lg.info:{show "[",(string .z.P)," - INFO ] - ",x}
+  ];
 
 // Get ROS2 Interface package directory
 .ros.interfaceDir:getenv `INTERFACES_DIR;
@@ -42,3 +45,6 @@ tbls:{([tbl:tables[]]cnt:count each get each tables[])};
 
 // Load in CSV configs for ROS2 Package
 .ros.config.accessors:1!("SSSSS";enlist csv) 0: hsym `$.ros.configDir,"cKDBAccessors.csv";
+
+// Set schemas loaded flag to false
+.ros.schemasSet:0b;

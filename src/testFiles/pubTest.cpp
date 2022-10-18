@@ -106,3 +106,41 @@ int main(int argc, char * argv[])
   rclcpp::shutdown();
   return 0;
 }
+
+
+while handle not created;
+try to connect, save output
+
+if output>0, exit while loop
+if output=0, authentication error
+if output=-1 connection error
+if output=-2 timeout error
+
+  while (hndl<=0) {
+      if(hndl==0){
+          RCLCPP_INFO ""
+      }
+      if(hndl==-1){
+          RCLCPP_INFO ""
+      }
+      if(hndl==-2){
+          RCLCPP_INFO ""
+      }
+  hndl = khpun("0.0.0.0", 1234,"myusername:mypassword";5000);
+    }
+
+
+hndl = khpu("0.0.0.0", 1234,"myusername:mypassword");
+khpun (connect)¶
+
+I khpun(const S hostname, I port, const S credentials, I timeout)
+
+Establish a connection to hostname on port providing credentials (username:password format) with timeout.
+
+On success, returns positive file descriptor for established connection. On error, 0 or a negative value is returned.
+
+ 0   Authentication error
+-1   Connection error
+-2   Timeout error
+
+Standalone apps only. Available only from the c/e libs and not as a shared library loaded into kdb+.

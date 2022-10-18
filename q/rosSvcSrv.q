@@ -1,8 +1,8 @@
 // Init functions
 .ros.servInit:{[]
   .ros.servHndl:neg .z.w;
-  .ros.setServerSchemas[];
-  show `$"ROS2 Service is initialised";
+  if[not .ros.schemasSet;.ros.setServerSchemas[]];
+  .lg.info "ROS2 Service is initialised";
   };
 
 // Dummy function for client/server check
@@ -18,6 +18,7 @@
   .ros.parseServiceSchema each distinct .ros.config.servers[`svcNameToSRV];
   {.ros.makeReq[x[`ServerName]] set .ros.schemas[.ros.makeReq[x`svcNameToSRV]]}each .ros.config.servers;
   {.ros.makeRes[x[`ServerName]] set .ros.schemas[.ros.makeRes[x`svcNameToSRV]]}each .ros.config.servers;
+  .ros.schemasSet:1b;
   };
 
 //================================================= RUN =================================================//

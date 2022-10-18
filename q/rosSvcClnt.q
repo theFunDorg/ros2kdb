@@ -1,8 +1,8 @@
 // Init function
 .ros.clientInit:{[]
   .ros.clntHndl:neg .z.w;
-  .ros.setClientSchemas[];
-  show `$"ROS2 Client is initialised";
+  if[not .ros.schemasSet;.ros.setClientSchemas[]];
+  .lg.info "ROS2 Client is initialised";
   };
 
 // ROS2 Client Request/Response handlers
@@ -25,6 +25,7 @@
   {x[`ClientName] set .ros.schemas[x`clntNameToSRV]}each .ros.config.clients;
   {.ros.makeReq[x[`ClientName]] set .ros.schemas[.ros.makeReq[x`clntNameToSRV]]}each .ros.config.clients;
   {.ros.makeRes[x[`ClientName]] set .ros.schemas[.ros.makeRes[x`clntNameToSRV]]}each .ros.config.clients;
+  .ros.schemasSet:1b;
   };
 
 //================================================= RUN =================================================//
