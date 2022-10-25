@@ -16,27 +16,27 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -march=native")
  find_package(rosidl_default_generators REQUIRED)
  find_package(racer_interfaces REQUIRED)
 
-#add_executable(kdbsub   src/run/subscribe_1.cpp 	include/c.o)
-#ament_target_dependencies(kdbsub rclcpp racer_interfaces)
-#target_include_directories(kdbsub 	 PRIVATE  "./include")
+add_executable(kdbsub   src/run/subscribe_1.cpp 	include/c.o)
+ament_target_dependencies(kdbsub rclcpp racer_interfaces)
+target_include_directories(kdbsub 	 PRIVATE  "./include")
 
-#add_executable(kdbpub   src/run/publish_1.cpp 	include/c.o)
-#ament_target_dependencies(kdbpub rclcpp racer_interfaces)
-#target_include_directories(kdbpub   PRIVATE  "./include")
+add_executable(kdbpub   src/run/publish_1.cpp 	include/c.o)
+ament_target_dependencies(kdbpub rclcpp racer_interfaces)
+target_include_directories(kdbpub   PRIVATE  "./include")
 
 #add_executable(kdbsvr   src/run/server_1.cpp	include/c.o)
 #ament_target_dependencies(kdbsvr rclcpp racer_interfaces)
 #target_include_directories(kdbsvr   PRIVATE  "./include")
 
-add_executable(kdbclnt   src/run/client_1.cpp	include/c.o)
-ament_target_dependencies(kdbclnt rclcpp racer_interfaces)
-target_include_directories(kdbclnt  PRIVATE  "./include")
+#add_executable(kdbclnt   src/run/client_1.cpp	include/c.o)
+#ament_target_dependencies(kdbclnt rclcpp racer_interfaces)
+#target_include_directories(kdbclnt  PRIVATE  "./include")
 
 install(TARGETS
-  #kdbpub
-  #kdbsub
+  kdbpub
+  kdbsub
   #kdbsvr
-  kdbclnt
+  #kdbclnt
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
