@@ -12,13 +12,13 @@ Currently, the code is written for a package called racer_interfaces located in 
 
 Set the Package's directory as ROS2KDB_DIR. 
 
-    export ROS2KDB_DIR=~/cloud/ros_ws/src/ros2kdb/
+    export ROS2KDB_DIR=~/podracer/ros_ws/src/ros2kdb
 
 Set the Package's other directories. These are mostly used by the q qackage
 
-    export CONFIG_DIR=~/cloud/ros_ws/src/ros2kdb/config/
-    export INTERFACES_DIR=~/cloud/ros_ws/src/racer_interfaces/
-    export QROS_DIR=~/cloud/ros_ws/src/ros2kdb/q
+    export CONFIG_DIR=~/podracer/ros_ws/src/ros2kdb/config/
+    export INTERFACES_DIR=~/podracer/ros_ws/src/racer_interfaces/
+    export QROS_DIR=~/podracer/ros_ws/src/ros2kdb/q
 
 Use the below commands to create the C++ scripts
 

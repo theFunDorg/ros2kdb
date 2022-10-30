@@ -5,9 +5,9 @@
 #define KXVER 3
 #include "k.h"
 
-#include "racer_interfaces/msg/engine_actuate.hpp"
-
 #include "racer_interfaces/msg/engine_sensor.hpp"
+
+#include "racer_interfaces/msg/engine_actuate.hpp"
 
 using std::placeholders::_1;
 int hndl;
@@ -19,14 +19,20 @@ class KDBSubscriber_1 : public rclcpp::Node
     {
     // Creating the Subscriptions
 
-      subscription_l_eng_actuate=this->create_subscription<racer_interfaces::msg::EngineActuate>(
-      "/l_engine/actuator", 10, std::bind(&KDBSubscriber_1::callback_l_eng_actuate, this, _1));
+      subscription_l_eng_sense=this->create_subscription<racer_interfaces::msg::EngineSensor>(
+      "/left_engine/engine_sensors", 10, std::bind(&KDBSubscriber_1::callback_l_eng_sense, this, _1));
 
-      subscription_r_eng_sense=this->create_subscription<racer_interfaces::msg::EngineSensor>(
-      "/r_engine/sensor", 10, std::bind(&KDBSubscriber_1::callback_r_eng_sense, this, _1));
+      subscription_l_eng_actuate=this->create_subscription<racer_interfaces::msg::EngineActuate>(
+      "/left_engine/controls", 10, std::bind(&KDBSubscriber_1::callback_l_eng_actuate, this, _1));
 
     }
   private:
+
+    void callback_l_eng_sense(const racer_interfaces::msg::EngineSensor::SharedPtr msg) const
+    {
+      K msgRec=knk(7,ki( (msg->height)),kf( (msg->ax)),kf( (msg->ay)),kf( (msg->az)),kf( (msg->gx)),kf( (msg->gy)),kf( (msg->gz)));
+      k(hndl,"{[x] .ros.receive[\"l_eng_sense\";x]}",msgRec,(K)0);
+    }
 
     void callback_l_eng_actuate(const racer_interfaces::msg::EngineActuate::SharedPtr msg) const
     {
@@ -34,17 +40,11 @@ class KDBSubscriber_1 : public rclcpp::Node
       k(hndl,"{[x] .ros.receive[\"l_eng_actuate\";x]}",msgRec,(K)0);
     }
 
-    void callback_r_eng_sense(const racer_interfaces::msg::EngineSensor::SharedPtr msg) const
-    {
-      K msgRec=knk(7,ki( (msg->height)),kf( (msg->ax)),kf( (msg->ay)),kf( (msg->az)),kf( (msg->gx)),kf( (msg->gy)),kf( (msg->gz)));
-      k(hndl,"{[x] .ros.receive[\"r_eng_sense\";x]}",msgRec,(K)0);
-    }
-
     // Attaching the subscriptions
 
-      rclcpp::Subscription<racer_interfaces::msg::EngineActuate>::SharedPtr subscription_l_eng_actuate;
+      rclcpp::Subscription<racer_interfaces::msg::EngineSensor>::SharedPtr subscription_l_eng_sense;
 
-      rclcpp::Subscription<racer_interfaces::msg::EngineSensor>::SharedPtr subscription_r_eng_sense;
+      rclcpp::Subscription<racer_interfaces::msg::EngineActuate>::SharedPtr subscription_l_eng_actuate;
 
     };
 int main(int argc, char * argv[])

@@ -33,8 +33,8 @@ target_include_directories(kdbpub   PRIVATE  "./include")
 #target_include_directories(kdbclnt  PRIVATE  "./include")
 
 install(TARGETS
-  kdbpub
   kdbsub
+  kdbpub
   #kdbsvr
   #kdbclnt
   DESTINATION lib/${PROJECT_NAME})

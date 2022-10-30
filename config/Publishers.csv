@@ -1,3 +1,3 @@
 PublisherName,subNameToTopic,subNameToMsg
-r_eng_sense,/r_engine/sensor,EngineSensor
-l_eng_actuate,/l_engine/actuator,EngineActuate
+l_eng_sense,/left_engine/engine_sensors,EngineSensor
+l_eng_actuate,/left_engine/controls,EngineActuate
